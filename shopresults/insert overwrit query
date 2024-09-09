@@ -1,0 +1,22 @@
+insert overwrite table prd_priceent_fnd.digital_shopresults
+select * from stg_priceent_fnd.digital_shopresults
+where publish_week_end_d in ('2024-07-20' , '2024-07-13')
+
+
+insert overwrite table stg_priceent_fnd.digital_shopresults
+select * from prd_priceent_fnd.digital_shopresults
+where shop_crawl_d = '2024-07-24' 
+
+
+insert overwrite table stg_priceent_wrk.digital_shopresults_bkp
+select * from prd_priceent_fnd.digital_shopresults
+where shop_crawl_d >='2024-04-01' 
+
+
+insert into table prd_priceent_fnd.digital_shopresults
+select * from stg_priceent_fnd.digital_shopresults
+where shop_crawl_d in ('2024-07-07' , '2024-07-08','2024-07-09','2024-07-19','2024-07-20')
+
+insert into table stg_priceent_wrk.digital_shopresults_bkp
+select * from stg_priceent_fnd.digital_shopresults
+where shop_crawl_d in ('2024-07-07' , '2024-07-08','2024-07-09','2024-07-19','2024-07-20')

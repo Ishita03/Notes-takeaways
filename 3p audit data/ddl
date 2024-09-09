@@ -1,0 +1,19 @@
+ CREATE EXTERNAL TABLE `prd_priceinvo_wrk.ugam_audit_maps`(                    
+   `shopresult_id` string COMMENT '',                          
+    `tgt_group_name` string COMMENT '', 
+    `tgt_department_id` integer COMMENT '', 
+    `tcin` integer COMMENT '', 
+    `cmpt_retailer_name` string COMMENT '', 
+    `tgt_title` string COMMENT '', 
+    `cmpt_product_title` string COMMENT '', 
+    `tgt_brand` string COMMENT '', 
+    `cmpt_product_brand` string COMMENT '', 
+    `cmpt_product_url` string COMMENT '', 
+    `audit_status` string COMMENT '', 
+    `audit_comments` string COMMENT ''    )             
+ PARTITIONED BY (                                   
+   `crawl_week_end_d` string COMMENT '')                
+stored as orc       
+ LOCATION                                           
+   'hdfs://bigred3ns/user/SVPRIDSHDP/hive/external/prd/ugam_audit' 
+TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY');

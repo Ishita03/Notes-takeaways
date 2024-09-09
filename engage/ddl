@@ -1,0 +1,99 @@
+ CREATE EXTERNAL TABLE `stg_priceent_wrk.engage`(                    
+   `crawl_id` string COMMENT '',                          
+   `tcin` string COMMENT '',                        
+   `competitor_loyalty_multiple` double COMMENT '',       
+   `competitor_loyalty_ppu` string COMMENT '',            
+   `competitor_loyalty_price` double COMMENT '',          
+   `competitor_price_type_notation` string COMMENT '',    
+   `competitor_product_banner` string COMMENT '',         
+   `competitor_product_category_l1` string COMMENT '',    
+   `competitor_product_category_l2` string COMMENT '',    
+   `competitor_product_category_l3` string COMMENT '',    
+   `competitor_product_size` string COMMENT '',           
+   `competitor_product_size_uom` string COMMENT '',       
+   `competitor_product_sku` string COMMENT '',            
+   `competitor_product_title` string COMMENT '',          
+   `competitor_product_upc` string COMMENT '',            
+   `competitor_product_url` string COMMENT '',            
+   `competitor_promo_multiple` double COMMENT '',         
+   `competitor_promo_ppu` string COMMENT '',              
+   `competitor_promo_price` double COMMENT '',            
+   `competitor_reg_multiple` double COMMENT '',           
+   `competitor_reg_ppu` double COMMENT '',                
+   `competitor_reg_price` double COMMENT '',              
+   `competitor_stock_availability` string COMMENT '',     
+   `competitor_store_address` string COMMENT '',          
+   `competitor_store_city` string COMMENT '',             
+   `competitor_store_code` string COMMENT '',             
+   `competitor_store_id` string COMMENT '',               
+   `competitor_store_latitude` string COMMENT '',         
+   `competitor_store_longitude` string COMMENT '',        
+   `competitor_store_postal_code` string COMMENT '',      
+   `competitor_store_state` string COMMENT '',            
+   `crawl_d` string COMMENT '',                  
+   `created_ts` string COMMENT '',                  
+   `target_class_id` string COMMENT '',                
+   `target_class_name` string COMMENT '',              
+   `target_department_id` string COMMENT '',           
+   `target_department_name` string COMMENT '',         
+   `target_division_id` string COMMENT '',             
+   `target_division_name` string COMMENT '',           
+   `target_dpci` string COMMENT '',                    
+   `target_upc` string COMMENT '')                     
+ PARTITIONED BY (                                   
+   `crawl_week_end_d` string COMMENT '')                
+stored as orc       
+ LOCATION                                           
+   'hdfs://bigred3ns/user/SVPRIHDS/hive/external/stg/engage' 
+TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY');
+
+
+
+ CREATE EXTERNAL TABLE `prd_priceinvo_wrk.engage`(                    
+   `crawl_id` string COMMENT '',                          
+   `tcin` string COMMENT '',                        
+   `competitor_loyalty_multiple` double COMMENT '',       
+   `competitor_loyalty_ppu` string COMMENT '',            
+   `competitor_loyalty_price` double COMMENT '',          
+   `competitor_price_type_notation` string COMMENT '',    
+   `competitor_product_banner` string COMMENT '',         
+   `competitor_product_category_l1` string COMMENT '',    
+   `competitor_product_category_l2` string COMMENT '',    
+   `competitor_product_category_l3` string COMMENT '',    
+   `competitor_product_size` string COMMENT '',           
+   `competitor_product_size_uom` string COMMENT '',       
+   `competitor_product_sku` string COMMENT '',            
+   `competitor_product_title` string COMMENT '',          
+   `competitor_product_upc` string COMMENT '',            
+   `competitor_product_url` string COMMENT '',            
+   `competitor_promo_multiple` double COMMENT '',         
+   `competitor_promo_ppu` string COMMENT '',              
+   `competitor_promo_price` double COMMENT '',            
+   `competitor_reg_multiple` double COMMENT '',           
+   `competitor_reg_ppu` double COMMENT '',                
+   `competitor_reg_price` double COMMENT '',              
+   `competitor_stock_availability` string COMMENT '',     
+   `competitor_store_address` string COMMENT '',          
+   `competitor_store_city` string COMMENT '',             
+   `competitor_store_code` string COMMENT '',             
+   `competitor_store_id` string COMMENT '',               
+   `competitor_store_latitude` string COMMENT '',         
+   `competitor_store_longitude` string COMMENT '',        
+   `competitor_store_postal_code` string COMMENT '',      
+   `competitor_store_state` string COMMENT '',            
+   `crawl_d` string COMMENT '',                  
+   `created_ts` string COMMENT '',                  
+   `target_class_id` string COMMENT '',                
+   `target_class_name` string COMMENT '',              
+   `target_department_id` string COMMENT '',           
+   `target_department_name` string COMMENT '',         
+   `target_division_id` string COMMENT '',             
+   `target_division_name` string COMMENT '',           
+   `target_dpci` string COMMENT '',                    
+   `target_upc` string COMMENT '')                     
+ PARTITIONED BY (                                   
+   `crawl_week_end_d` string COMMENT '')                
+stored as orc       
+ LOCATION                                           
+   'hdfs://bigred3ns/user/SVPRIDSHDP/hive/external/prd/engage' 
+TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY');

@@ -1,0 +1,55 @@
+Data Profiling/ DQ suggestions for Engage Data
+Topic : shopright-engage3-shopresult-notifications-v1
+ENVIRONMENT: Stage/Dev
+Total records : 42835
+
+1. Field 'cmpt_reg_ppu':	'cmpt_reg_ppu' has no negative values
+
+2. 'tgt_division_name':	'tgt_division_name' is not null
+
+3.  'tgt_division_name':	
+'tgt_division_name' has value range 'STATIONERY', 'KITCHEN', 'STORAGE/UTILITY', 'DOMESTICS', 'TOYS', 'DECORATIVE HOME', 'SPORTING GOODS'
+
+4. 'cmpt_product_size_uom':	'cmpt_product_size_uom' is not null
+
+5. 'cmpt_product_size_uom':
+'cmpt_product_size_uom' has value range '1 CT', '1 EACH', '1 EA', '2 CT', '4 CT', '3 CT', '10 CT', '100 CT', '24 CT', '8 CT', '5 CT', '48 CT', '200 CT', '6 CT', '3 IN', '4 FLOZ', '30 CT', '40 FLOZ', '18 CT', '20 CT', '12 CT', '20 PK', '26 OZ', '5 IN', '1.26 OZ', '50 CT', '2.52 OZ', '4 PK', '17 IN', '20 LB', '1.03937064 IN', '3 PK', '48 FLOZ', '400 CT', '0.27559069999999997 IN', '25 CT', '2.31 OZ', '150 CT', '5 PK', '8.5 IN', '1 IN', '0.6614176799999999 IN', '70 CT', '12 OZ', '0.16535441999999997 IN', '9 CT', '7.625 FLOZ', '160 OZ', '1.1023627999999999 IN', '1536 FLOZ', '0.047244119999999994 IN', '5 OZ', '83.632 OZ', '598 CT', '2304 FLOZ', '2 PK', '448 FLOZ', '118.1103 IN', '56 FLOZ', '300 IN', '252 PIECE', '16 CT', '96 FLOZ', '30720 FLOZ', '0.8 OZ', '96 IN', '20 OZ', '14.878160000000001 FLOZ', '1.0 CT', '60 CT', '40 CT', '7 CT', '144 FLOZ', '5760 FLOZ', '79.0144 OZ', '10.5 IN'
+
+6. 'cmpt_product_category_l1':	'cmpt_product_category_l1' is not null
+
+7.'cmpt_product_category_l1':	
+'cmpt_product_category_l1' has value range 'Mass Merchandise', 'HOME', 'Home', 'HARDLINES', 'Toys', 'Office Supplies', 'Seasonal', 'Home Improvement', 'Sports & Outdoors', 'Arts Crafts & Sewing', 'Grocery', '', 'Shop with Purpose', 'Collectibles', 'Food'
+
+8.  'cmpt_product_sku':	'cmpt_product_sku' is not null
+
+9. ='tgt_group_id':	'tgt_group_id' is not null
+
+10. 'cmpt_product_banner' has value 'Walmart'
+
+11.'cmpt_store_id':	'cmpt_store_id' is not null
+
+12. Constraint suggestion for 'tgt_dpci':	'tgt_dpci' is not null
+
+13. 'tgt_group_name':	'tgt_group_name' has value range 'HOME', 'HARDLINES'
+
+14.  'tgt_department_name':	'tgt_department_name' has value range 'SCHOOL/OFFICE SUPPLIES', 'SMALL APPLIANCES', 'HARDWARE', 'STORAGE/ORGANIZATION', 'BATH', 'PRESCHOOL/SEASONAL TOYS', 'FURNITURE', 'GAMES/DIECAST/ACTION FIGURES', 'BASIC BEDDING', 'SOFT DECOR', 'LIGHTING/WALL DECOR', 'WINDOW', 'KITCHENWARE', 'TABLETOP', 'ACTIVITIES/DOLLS/PLUSH', 'BICYCLES/PHYSICAL FITNESS', 'COLLECTION BEDDING', 'RUGS', 'LUGGAGE'
+
+15.  'id':	'id' is not null
+
+16. 'tcin':	'tcin' is not null
+
+17.  'cmpt_product_category_l2':	'cmpt_product_category_l2' has value range 'Household', 'Office and School Supplies', 'Home Improvement', 'Toys', 'DECORATIVE HOME', 'DOMESTICS', 'KITCHEN', 'STATIONERY', 'TOYS', 'STORAGE/UTILITY', 'Furniture', 'Outdoors Products', 'Appliances', 'Decor', 'Arts and Crafts Supplies', 'Health and Beauty Products', 'Bath', 'Kitchen & Dining', 'Back to School', 'Home Cleaning Products', 'Building Sets & Blocks', 'Bedding', 'Storage & Organization', 'Baby and Toddler Products', 'Outdoor Sports', 'Home ideas & inspiration', 'Kids'' Rooms', 'Pencils & Pencil Sharpeners', 'Hobby & Collectible Toys', 'Hardware', 'Paper', 'Featured Shops', 'Pantry', 'Markers and Highlighters', '', 'Crafting', 'Electrical', 'Shop Toys by Brand', 'Built for Better', 'SPORTING GOODS', 'Dolls & Dollhouses', 'Collectible Plush', 'Games & Puzzles', 'Folders', 'Action Figures and Playsets', 'Binders & Accessories', 'Disney Toys', 'Rulers, Compasses & Protractors', 'School Supplies', 'Sewing', 'Gifts and Party Supplies', 'Learning Toys', 'Heating, Cooling, & Air Quality', 'Holiday Decor', 'Beverages', 'Stuffed Animals & Plush Toys', 'Teens'' Rooms'
+
+18.  'cmpt_store_state':	'cmpt_store_state' has value range 'IN', 'CA', 'GA', 'PA', 'AZ', 'IL', 'NY', 'CT', 'FL', 'NV', 'OH', 'WA', 'NJ', 'MD', 'OK', 'WI', 'OR', 'NC', 'HI', 'MO', 'TX', 'WV', 'NH', 'CO', 'MN', 'AK', 'AR', 'IA', 'UT', 'MI', 'MA', 'MS', 'VA', 'AL'
+
+19. 'cmpt_product_category_l3':	'cmpt_product_category_l3' has value range 'School Supplies', 'Kitchen Products', 'Office Supplies', 'Hardware', 'SCHOOL/OFFICE SUPPLIES', 'Living Room Furniture and Decor', 'Home Storage Products', 'PRESCHOOL/SEASONAL TOYS', 'Bedroom Products', 'SMALL APPLIANCES', 'FURNITURE', 'BATH', 'LEGO', 'Home Decor', 'SOFT DECOR', 'GAMES/DIECAST/ACTION FIGURES', 'Plumbing Products', 'Bathroom Products', 'Drawing Art Products', 'STORAGE/ORGANIZATION', 'Boys Toys', 'BASIC BEDDING', 'Body Care and Wellness Products', 'Kitchen Appliances', 'LIGHTING/WALL DECOR', 'Office Furniture', 'HVAC', 'Electrical Repair', 'Shop all Back to School', 'KITCHENWARE', 'Cleaning Supplies', 'HARDWARE', 'Pedestrian Wheels', 'Home Lighting', 'Engineering and Building Toys', 'Garage Storage', 'Decorative Accents', 'TABLETOP', 'Baby Toys', 'Games and Puzzles', 'ACTIVITIES/DOLLS/PLUSH', 'Living Room Furniture', '', 'Shower Curtains & Accessories', 'Recreational Shooting', 'Lighting & Light Fixtures', 'First apartment', 'Kitchen and Bathroom Renovation Products', 'Refrigerators', 'WINDOW', 'Blankets', 'COLLECTION BEDDING', 'Hot Wheels', 'Shop Kitchen & Dining', 'Mechanical Pencils', 'Hooks', 'Storage Baskets & Bins', 'Bathroom Storage', 'Dining & Entertaining', 'Shelf Stable Drinks and Hot Drinks', 'Dorm Room Essentials', 'Electronic and RC Toys', 'All Collectible Action Figures', 'Play Doughs, Putty, and Sand', 'Laundry Room Products', 'Throw Blankets', 'Highlighters', 'Girls Toys', 'Craft Supplies', 'Light Bulbs', 'NERF & Blaster Toys', 'Laundry Storage & Organization', 'Kids'' Furniture', 'Kitchen Storage & Organization', 'Post-it Notes', 'Throw Pillows', 'For Planet', 'LUGGAGE', 'Games by Age', 'LeapFrog Learning Toys', 'Bedroom Furniture', 'Kids'' Bedding', 'Dolls', 'Pocket Folders', 'Dinosaur and Animal Toys', 'Gel Pens', 'Dividers', 'Kitchen & Table Linens', 'Cars & SUV Toys', 'Trash Cans', 'Loose Leaf Filler Paper', 'Bath Towels', 'All Disney Toys', 'Bathroom Accessories', 'Mattress Toppers & Pads', 'Bed Pillows', 'MM & CM Metric Rulers', 'Wooden and #2 Pencils', 'Clocks', 'School Arts and Crafts', 'Sewing & Cutting Tools', 'Pens', 'Mirrors', 'Seasonal', 'Star Wars Toys', 'Cutlery', 'Cooling', 'Kitchen & Dining Furniture', 'Pots & Pans', 'Bed Sheets & Pillowcases', 'Model Kits', 'Fashion Dolls', 'Pens Catch All', 'VTech Toys', 'Basic Bedding', 'Decorative Pillows', 'Water Flavoring', 'Fall Decor', 'Building Sets for Boys', '2 to 4 Years', 'Curtains & Window Treatments', 'Middle School Supplies', 'Teens'' Bathroom', 'Zuru Smashers'
+
+20.  'link_type':	'link_type' has value range 'GOOD', 'FAIR', 'EXACT'
+
+21. 'tgt_class_name':	'tgt_class_name' has value range 'WRITING INSTRUMENTS', 'LEGO', 'DECORATIVE HARDWARE', 'WATER PURIFICATION', 'PLASTIC STORAGE', 'COFFEE MAKERS & ACCESSORIES', 'CRAFTING', 'SCHOOL & ART SUPPLIES', 'BASIC FURNITURE', 'TOSS PILLOWS', 'SHOWER BASICS', 'SMALL DIECAST VEHICLES', 'HOME/OFFICE PAPER', 'SMALL APPLIANCES', 'HOME/OFFICE SUPPLIES', 'BTC', 'MICROWAVES/REFRIGERATORS', 'SCHOOL PAPER', 'BATH COORDINATES', 'BATH STORAGE/ORG', 'WINDOW PANELS', 'BASIC HARDWARE', 'BLANKETS', 'SPORTS AND BLASTERS', 'LAUNDRY/WASTEBASKETS', 'PORTFOLIOS AND BINDERS', 'TOASTERS', 'ROOM ESSENTIALS SHEETS', 'ASSEMBLED TABLE AND TASK LIGHTING', 'LIGHTBULBS', 'PILLOWS', 'COOKWARE', 'BOYS ACTION', 'ROOM ESSENTIALS', 'SLOW COOKING', 'COFFEE/HYDRATION', 'FANS', 'KITCHEN ORGANIZATION', 'BOXED BIKES/WAGONS/TRIKES', 'DISNEY', 'BOARD GAMES', 'CUTLERY', 'FRAMES', 'LAMINATE/WIRE ORGANIZATION', 'MATTRESS PADS', 'KITCHEN TEXTILES', 'KITCHEN TOOLS & GADGETS', 'PROTECTORS', 'FLOOR LIGHTING', 'MIRRORS', 'BATH SOFT DECOR', 'ELECTRICAL SUPPLIES', 'THROWS', 'FOLDING FURNITURE', 'PLASTIC DINNERWARE', 'EDUCATIONAL TOYS', 'INFANT/TODDLER', 'CLOCKS', 'SOFT LAUNDRY', 'DOORMATS', 'ACTIVITY TOYS', 'HOME SAFETY', 'FLATWARE', 'FASHION DOLLS', 'HOME ENVIRONMENT', 'DEC PILLOWS', 'DECORATIVE STORAGE', 'ACTION', 'CLOSET', 'LUNCH KITS', 'ACCENT RUGS', 'BEDDING SETS', 'COMFORTERS', 'QUILTS', 'DE-HUM/AIR COND', 'MEM FOAM', 'KIDS LUGGAGE'
+
+22. Constraint suggestion for 'tgt_department_id':	'tgt_department_id' is not null
+The corresponding scala code is .isComplete("tgt_department_id")
+
+
+

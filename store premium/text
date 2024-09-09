@@ -1,0 +1,40 @@
+  PriceCodeTable = "prd_priceent_wrk.price_codes"
+
+  PriceCodeLocation ="/user/SVPRIHDP/hive/external/ivy_code_val"
+
+
+def applyJoinedDfTransformation(premiumInputDF: DataFrame, priceStoreInputDF: DataFrame, priceCodeDF: DataFrame): DataFrame = {
+    logInfo(s"Before join count - ${premiumInputDF.count()} - ${priceStoreInputDF.count()} - ${priceCodeDF.count()}")
+    val joinedDF = priceStoreInputDF.join(premiumInputDF, premiumInputDF(location_classification_id) === priceStoreInputDF(location_classification_id), LEFT)
+      .join(priceCodeDF, priceStoreInputDF(location_classification_id) === priceCodeDF(price_code), LEFT)
+      .drop(premiumInputDF(ApplicationConstants.update_user))
+      .drop(premiumInputDF(ApplicationConstants.update_timestamp))
+      .drop(premiumInputDF(ApplicationConstants.change_value_type))
+      .drop(premiumInputDF(ApplicationConstants.change_event_type))
+      .drop(premiumInputDF(ApplicationConstants.location_classification_id))
+      .withColumn(ApplicationConstants.store_id, col(ApplicationConstants.store_id).cast(IntegerType))
+      .withColumn(ApplicationConstants.store_type, col(ApplicationConstants.store_type).cast(StringType))
+      .withColumn(ApplicationConstants.segment_id, col(ApplicationConstants.segment_id).cast(IntegerType))
+      .withColumn(ApplicationConstants.price_strategy_id, col(ApplicationConstants.price_strategy_id).cast(IntegerType))
+      .withColumn(price_code_desc, col(price_desc))
+      .withColumn(price_code_short_desc, col(price_desc))
+      .withColumn(price_code_long_desc, col(price_desc))
+      .withColumn(ApplicationConstants.update_timestamp, date_format(col(ApplicationConstants.update_timestamp), "yyyy-MM-dd'T'HH:mm:ss'Z'"))
+      .select(
+        ApplicationConstants.store_id,
+        ApplicationConstants.store_type,
+        ApplicationConstants.location_classification_id,
+        ApplicationConstants.segment_id,
+        ApplicationConstants.price_strategy_id,
+        ApplicationConstants.premium_pct,
+        ApplicationConstants.price_code_desc,
+        price_code_short_desc,
+        price_code_long_desc,
+        ApplicationConstants.update_user,
+        ApplicationConstants.update_timestamp)
+    logInfo("Join function completed")
+    logInfo(s"Count after join - ${joinedDF.count()}")
+    joinedDF
+  }
+
+

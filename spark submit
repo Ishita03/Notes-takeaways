@@ -1,0 +1,44 @@
+spark-submit \
+--keytab /etc/security/keytabs/SVPRIHDS.keytab \
+--principal SVPRIHDS@BIGRED.TARGET.COM \
+--deploy-mode cluster \
+--class com.tgt.de.price.digital_ci_api.PipelineInvoker \
+--master yarn \
+--name stg_digital \
+--queue SVPRIHDS \
+--driver-memory 16g \
+--executor-memory 20g \
+--executor-cores 5 \
+--conf spark.dynamicAllocation.enabled=true \
+--conf spark.dynamicAllocation.minExecutors=1 \
+--conf spark.dynamicAllocation.maxExecutors=60 \
+--conf spark.yarn.maxAppAttempts=1 \
+--conf spark.hadoop.hive.exec.dynamic.partition=true \
+--conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict \
+--conf spark.hadoop.hive.support.concurrency=true \
+--conf spark.executor.extraJavaOptions='-Dlog4j.configuration=/home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test.log4j.properties'  --conf spark.datasource.hive.warehouse.load.staging.dir=/user/SVPRIHDS/hive/tmp \
+--files /home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test/stg_application.conf --files /home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test/log4j.properties#log4j.properties \
+/home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test/digital-ci-api-dpp-assembly-0.1.jar /home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test/stg_application.conf "2024-07-22" "2024-07-21" "" "WN17j5gzPbjHO05QPzgzipTMCPXpY30Y320JjUoTZIcYyd5dzxuYXZGec8FZbYF1"
+
+
+spark-submit \
+--keytab /etc/security/keytabs/SVPRIHDS.keytab \
+--principal SVPRIHDS@BIGRED.TARGET.COM \
+--deploy-mode cluster \
+--class com.tgt.dsc.price.comprice.DataPipelineKickStarter \
+--master yarn \
+--name test_dq \
+--queue SVPRIHDS \
+--driver-memory 16g \
+--executor-memory 20g \
+--executor-cores 5 \
+--conf spark.dynamicAllocation.enabled=true \
+--conf spark.dynamicAllocation.minExecutors=1 \
+--conf spark.dynamicAllocation.maxExecutors=60 \
+--conf spark.yarn.maxAppAttempts=1 \
+--conf spark.hadoop.hive.exec.dynamic.partition=true \
+--conf spark.hadoop.hive.exec.dynamic.partition.mode=nonstrict \
+--conf spark.hadoop.hive.support.concurrency=true \
+--files /home_dir/svprihds/bigred3/priceinsights/stg/digital_ci_api_dpp/DPP/test/log4j.properties \
+--conf spark.executor.extraJavaOptions='-Dlog4j.configuration=log4j.properties' \
+/home_dir/svprihds/test_per/ishita_test/competitor-price-agg-dpp_2.11-0.1.jar /home_dir/svprihds/test_per/ishita_test/stg_app.conf "2024-06-23" " " "WN17j5gzPbjHO05QPzgzipTMCPXpY30Y320JjUoTZIcYyd5dzxuYXZGec8FZbYF1"

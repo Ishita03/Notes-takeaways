@@ -1,5 +1,5 @@
-CREATE EXTERNAL TABLE prd_priceinvo_wrk.ugam_shopresults (
-    shopresult_id                               STRING COMMENT '',
+CREATE EXTERNAL TABLE prd_priceinvo_wrk.ugam_edd (
+   shopresult_id                                          STRING COMMENT '',
     tcin                                        STRING COMMENT '',
     amazon_best_seller_ranking                  STRING COMMENT '',
     cmpt_category                               STRING COMMENT '',
@@ -74,18 +74,18 @@ CREATE EXTERNAL TABLE prd_priceinvo_wrk.ugam_shopresults (
     ugam_crawl_ts                               STRING COMMENT '',
     ugam_match_confidence_score                 STRING COMMENT '',
     ugam_match_status                           STRING COMMENT '',
-    audit_status                                STRING COMMENT '',
+     audit_status                                STRING COMMENT '',
     audit_comments                                STRING COMMENT ''
    
 )
 PARTITIONED BY (shop_week_end_d STRING COMMENT '')
 STORED AS ORC
-LOCATION '/user/SVPRIDSHDP/hive/external/prd/ugam_shopresults'
+LOCATION '/user/SVPRIDSHDP/hive/external/prd/ugam_edd'
 TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY');
 
 
-CREATE EXTERNAL TABLE stg_priceent_wrk.ugam_shopresults (
-     shopresult_id                               STRING COMMENT '',
+CREATE EXTERNAL TABLE stg_priceent_wrk.ugam_edd (
+   shopresult_id                                          STRING COMMENT '',
     tcin                                        STRING COMMENT '',
     amazon_best_seller_ranking                  STRING COMMENT '',
     cmpt_category                               STRING COMMENT '',
@@ -160,15 +160,17 @@ CREATE EXTERNAL TABLE stg_priceent_wrk.ugam_shopresults (
     ugam_crawl_ts                               STRING COMMENT '',
     ugam_match_confidence_score                 STRING COMMENT '',
     ugam_match_status                           STRING COMMENT '',
-    audit_status                                STRING COMMENT '',
+     audit_status                                STRING COMMENT '',
     audit_comments                                STRING COMMENT ''
+   
 )
 PARTITIONED BY (shop_week_end_d STRING COMMENT '')
 STORED AS ORC
-LOCATION '/user/SVPRIHDS/hive/external/ugam_shopresults'
-TBLPROPERTIES ('orc.compress'='SNAPPY');
+LOCATION '/user/SVPRIHDS/hive/external/ugam_edd'
+TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY');
 
-insert overwrite table stg_priceent_wrk.ugam_shopresults
+
+insert overwrite table stg_priceent_wrk.ugam_edd
 select 
     shopresult_id                               ,
     tcin                                        ,
@@ -249,8 +251,9 @@ select
     audit_comments                                ,
     shop_week_end_d
     from 
-prd_priceinvo_wrk.ugam_shopresults
+prd_priceinvo_wrk.ugam_edd
 
-insert overwrite table prd_priceinvo_wrk.ugam_shopresults
-select * from stg_priceent_wrk.ugam_shopresults
-where shop_week_end_d='2024-08-10'
+
+insert overwrite table prd_priceinvo_wrk.ugam_edd 
+select * from stg_priceent_wrk.ugam_edd
+where shop_week_end_d='2024-08-24'

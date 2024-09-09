@@ -1,0 +1,125 @@
+
+val prd  = spark.read.table("prd_priceent_fnd.digital_shopresults").where("shop_crawl_d >= '2024-07-10' AND shop_crawl_d <= '2024-07-18'")
+
+val stg  = spark.read.table("stg_priceent_fnd.digital_shopresults").where("shop_crawl_d >= '2024-07-10' AND shop_crawl_d <= '2024-07-18'")
+val prd  = spark.read.table("prd_priceent_fnd.digital_shopresults").where("shop_crawl_d >= '2024-07-01''")
+prd.coalesce(20).write.mode("overwrite").format("orc").insertInto("stg_priceent_wrk.digital_shopresults_bkp")
+
+   val stgdf = stg.select(columns.map(col): _*)
+
+
+   val prddf = prd.select(columns.map(col): _*)
+
+   val writeto = finalDF.select(columns.map(col): _*)
+
+   comp.coalesce(20).write.mode("overwrite").format("orc").insertInto("stg_priceent_fnd.digital_shopresults")
+
+   val columns: Seq[String] = Seq(
+  "tcin",
+  "crawl_id",
+  "retailer_short_n",
+  "competitor_product_id",
+  "crawl_url",
+  "shopped_crawl_utc_ts",
+  "is_buy_box_winner_f",
+  "is_buy_box_fulfiller_f",
+  "offer_retail_a",
+  "regular_retail_a",
+  "competitor_retail_a",
+  "currency_c",
+  "newton_availability_c",
+  "promo_message_t",
+  "zip_c",
+  "state_c",
+  "city_n",
+  "saved_html_link",
+  "competitor_product_title",
+  "sku",
+  "competitor_isbn10",
+  "competitor_isbn13",
+  "upc",
+  "item_model_number",
+  "review_count",
+  "star_rating",
+  "crawled_variant_attribute_n",
+  "crawled_variant_attribute_value",
+  "product_desc",
+  "seller_id",
+  "buy_box_winner_n",
+  "buy_box_fulfiller_n",
+  "buy_box_info_seller_id",
+  "item_condition_value",
+  "item_condition_additional_information",
+  "raw_competitor_seller_price_data_arr",
+  "seller_item_online_availability",
+  "seller_item_buyability",
+  "seller_promo_information",
+  "seller_review_count",
+  "seller_start_rating",
+  "is_market_place_f",
+  "dpci",
+  "department_id",
+  "audit_status_f",
+  "shop_validity_f",
+  "shop_channel",
+  "data_provider_c",
+  "source_system_n",
+  "shop_crawl_d",
+  "publish_week_end_d"
+)
+
+|-- tcin: string (nullable = true)
+ |-- crawl_id: string (nullable = true)
+ |-- retailer_short_n: string (nullable = true)
+ |-- competitor_product_id: string (nullable = true)
+ |-- crawl_url: string (nullable = true)
+ |-- shopped_crawl_utc_ts: string (nullable = true)
+ |-- is_buy_box_winner_f: boolean (nullable = true)
+ |-- is_buy_box_fulfiller_f: boolean (nullable = true)
+ |-- offer_retail_a: double (nullable = true)
+ |-- regular_retail_a: double (nullable = true)
+ |-- competitor_retail_a: double (nullable = true)
+ |-- currency_c: string (nullable = true)
+ |-- newton_availability_c: string (nullable = true)
+ |-- promo_message_t: string (nullable = true)
+ |-- zip_c: string (nullable = true)
+ |-- state_c: string (nullable = true)
+ |-- city_n: string (nullable = true)
+ |-- saved_html_link: string (nullable = true)
+ |-- competitor_product_title: string (nullable = true)
+ |-- sku: string (nullable = true)
+ |-- competitor_isbn10: string (nullable = true)
+ |-- competitor_isbn13: string (nullable = true)
+ |-- upc: string (nullable = true)
+ |-- item_model_number: string (nullable = true)
+ |-- review_count: string (nullable = true)
+ |-- star_rating: string (nullable = true)
+ |-- crawled_variant_attribute_n: string (nullable = true)
+ |-- crawled_variant_attribute_value: string (nullable = true)
+ |-- product_desc: string (nullable = true)
+ |-- seller_id: string (nullable = true)
+ |-- buy_box_winner_n: string (nullable = true)
+ |-- buy_box_fulfiller_n: string (nullable = true)
+ |-- buy_box_info_seller_id: string (nullable = true)
+ |-- item_condition_value: string (nullable = true)
+ |-- item_condition_additional_information: string (nullable = true)
+ |-- raw_competitor_seller_price_data_arr: array (nullable = true)
+ |    |-- element: struct (containsNull = true)
+ |    |    |-- currency: string (nullable = true)
+ |    |    |-- price: string (nullable = true)
+ |    |    |-- type: string (nullable = true)
+ |-- seller_item_online_availability: string (nullable = true)
+ |-- seller_item_buyability: string (nullable = true)
+ |-- seller_promo_information: string (nullable = true)
+ |-- seller_review_count: string (nullable = true)
+ |-- seller_start_rating: string (nullable = true)
+ |-- is_market_place_f: boolean (nullable = true)
+ |-- dpci: string (nullable = true)
+ |-- department_id: integer (nullable = true)
+ |-- audit_status_f: boolean (nullable = true)
+ |-- shop_validity_f: string (nullable = true)
+ |-- shop_channel: string (nullable = true)
+ |-- data_provider_c: string (nullable = true)
+ |-- source_system_n: string (nullable = true)
+ |-- shop_crawl_d: string (nullable = true)
+ |-- publish_week_end_d: string (nullable = true)

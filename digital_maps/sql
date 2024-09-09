@@ -1,0 +1,2 @@
+insert overwrite table stg_priceent_wrk.digital_maps_v2
+select * from prd_priceent_fnd.digital_maps

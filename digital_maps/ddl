@@ -1,0 +1,48 @@
+
+
+ CREATE EXTERNAL TABLE `stg_priceent_wrk.digital_maps_bkp`(           
+   `channel_n` string COMMENT 'This is an enum DIGITAL/STORE, for now we are only sending DIGITAL',  
+   `competitor_short_name` string COMMENT 'This is respective competitor in case of mapping and auditing event',  
+   `event_n` string COMMENT 'This is the event name/type for the kafka message',  
+   `event_description` string COMMENT 'This is the additional description of the event message',  
+   `audit_status` string COMMENT 'This is the current audit status PASS/FAIL',  
+   `audited_by` string COMMENT 'This is an person/system who has audited',  
+   `audited_utc_ts` string COMMENT 'It is the auditing time for the tcin',  
+   `competitor_product_id` string COMMENT 'This is the competitor product id for the tcin',  
+   `competitor_url` string COMMENT 'This is the competitor url for the tcin',  
+   `created_by` string COMMENT 'This is person/system who has created the event',  
+   `created_utc_ts` string COMMENT 'It is the creation time for the tcin',  
+   `event_reason` string COMMENT 'This is the reason for the event',  
+   `is_map_attempted` boolean COMMENT 'This tells if tcin have map for this tcin_cmpt_list_i attempted or not',  
+   `map_audit_comment` string COMMENT 'This tells if there is any comments while mapping or auditing',  
+   `map_flow_status` string COMMENT 'This shows if map have pending_afm/pending_ops',  
+   `mapped_by` string COMMENT 'This is person/system who has mapped the tcin',  
+   `mapped_status` string COMMENT 'It is the current mapping status',  
+   `mapped_utc_ts` string COMMENT 'This is the time at which tcin is mapped',  
+   `new_cadence` bigint COMMENT 'This is the new cadence of the tcin',  
+   `old_cadence` bigint COMMENT 'This is the previous cadence of the tcin',  
+   `tcin_competitor_list_id` bigint COMMENT 'It is the tcin cmpt list id (id to uniquely identify tcin and cmpt combination)',  
+   `listing_status` string COMMENT 'ACTIVE/INACTIVE status of event',  
+   `update_by` string COMMENT 'This is the person/system who has updated the mapping',  
+   `update_utc_ts` string COMMENT 'This is the last updation time for the mapping',  
+   `event_utc_ts` string COMMENT 'It is the event timestamp when the event was generated',  
+   `source_system` string COMMENT 'This is the system from which the event has generated',  
+   `sub_system` string COMMENT 'This is the user of the system which triggered the event',  
+   `tcin` string COMMENT 'Uniquely identifiable item number Item Identifier which is a combination of department,class and item ids in ddd-cc-iiii format',  
+   `sla_map_days` int COMMENT 'The items that have not been attempted by AFM/Manual Mappers for 30 days are marked as 0 else 1',  
+   `sla_map_remaining_days` bigint COMMENT 'the number of days the sla is breached for the items for the AFM/manual mappers',  
+   `priority_f` int COMMENT 'flag to check if record is from transactional or sync') 
+ PARTITIONED BY (                                   
+   `load_d` string COMMENT 'partition column based on the period end date') 
+ ROW FORMAT SERDE                                   
+   'org.apache.hadoop.hive.ql.io.orc.OrcSerde'      
+ STORED AS INPUTFORMAT                              
+   'org.apache.hadoop.hive.ql.io.orc.OrcInputFormat'  
+ OUTPUTFORMAT                                       
+   'org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat' 
+ LOCATION                                           
+   'hdfs://bigred3ns/user/SVPRIHDS/hive/external/newtonLifecycleEvents' 
+ TBLPROPERTIES (                                    
+ 'orc.compress'='SNAPPY')
+
+

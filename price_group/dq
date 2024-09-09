@@ -1,0 +1,53 @@
+Convert the following checks into spark code and add part of pipeline, if any one of the following fails then throw the exception, log the reason and abort the job.
+  -- Anchor should not associate with multiple group at point in time
+select count(distinct group_n), group_anchor_id, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false
+  group by group_anchor_id, channel_n having count(distinct group_n) > 1
+
+  -- Member should not associate with multiple Anchor at point in time
+  select count(distinct group_anchor_id), members_tcin, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false 
+  group by members_tcin, channel_n having count(distinct group_n) > 1
+  
+-- Member should not associate with multiple groups at point in time
+  select count(distinct group_n), members_tcin, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false 
+  group by members_tcin, channel_n having count(distinct group_n) > 1  
+
+
+
+  Not sure the DataSpectrum support these checks otherwise add the spark code as shown below for each one
+val memberInMultipleGroupCount = {
+  finalDdDupDF.filter(col("group_deleted_f") === false && col("members_update_utc_ts").isNotNull)
+    .groupBy("members_tcin", "channel_n")
+    .agg(countDistinct("group_anchor_id").as("group_count"))
+}
+
+if (memberInMultipleGroupCount.count() > 0) {
+  val alertMessage = memberInMultipleGroupCount
+    .collect()
+    .map(row => s"Value: ${row.getString(0)}, Group Count: ${row.getLong(1)}")
+    .mkString("\n")
+
+  // Log the alert message
+  LogInfo(s"Alert: The following values are assigned to multiple groups:${memberInMultipleGroupCount.count}")
+
+  // Abort the pipeline by throwing an exception
+  throw new RuntimeException("Aborting pipeline due to values assigned to multiple groups.")
+}
+
+
+-- Anchor should not associate with multiple group at point in time
+select count(distinct group_n), group_anchor_id, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false
+  group by group_anchor_id, channel_n having count(distinct group_n) > 1
+
+  -- Member should not associate with multiple Anchor at point in time
+  select count( distinct group_anchor_id), members_tcin, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false 
+  group by members_tcin, channel_n having count( distinct group_anchor_id) > 1
+  
+-- Member should not associate with multiple groups at point in time
+  select count(distinct group_n), members_tcin, channel_n from stg_priceent_wrk.price_group 
+  where  group_deleted_f = false 
+  group by members_tcin, channel_n having count(distinct group_n) > 1
