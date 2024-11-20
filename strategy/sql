@@ -1,0 +1,24 @@
+ CREATE EXTERNAL TABLE `stg_priceent_wrk.price_strategy_test18septishita`( 
+   `online_strategy_anchor_id` int,                 
+   `online_strategy_anchor_desc` string,            
+   `online_index_goal_percent` double,              
+   `online_strategy_segment_id` int,                
+   `online_strategy_segment_desc` string,           
+   `online_price_strategy_id` int,                  
+   `online_price_strategy_desc` string,             
+   `online_strategy_update_utc_ts` string,          
+   `store_strategy_anchor_id` int,                  
+   `store_strategy_anchor_desc` string,             
+   `store_index_goal_percent` double,               
+   `store_strategy_segment_id` int,                 
+   `store_strategy_segment_desc` string,            
+   `store_price_strategy_id` int,                   
+   `store_price_strategy_desc` string,              
+   `store_strategy_update_utc_ts` string,           
+   `tcin` string,                                   
+   `processed_ct_ts` timestamp)                     
+ STORED AS orc
+ LOCATION                                           
+   'hdfs://bigred3ns/user/SVPRIHDS/tmp/price_strategy' 
+ TBLPROPERTIES (                                    
+   'ORC.COMPRESS'='SNAPPY' )

@@ -1,0 +1,15 @@
+val df = spark.read
+  .format("csv")
+  .option("header", "true") // Use "false" if the CSV file doesn't have a header
+  .option("inferSchema", "true") // Automatically infer the data types of the columns
+  .load("/user/SVPRISTRMHDP/data/price/landing/Ugam/Ugam_3P_Maps_Auditing_Aug_Week_2.csv")
+
+val df1= df.drop("TM")
+
+df.printSchema
+
+val finaldf = df.withColumn("crawl_week_end_d", date_format(next_day(current_date(), "Sat") - expr("INTERVAL 7 DAYS"), "yyyy-MM-dd"))
+
+finaldf.coalesce(1).write.mode("overwrite").format("orc").insertInto("prd_priceinvo_wrk.ugam_audit_maps")
+
+

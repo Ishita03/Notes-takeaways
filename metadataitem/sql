@@ -1,0 +1,204 @@
+spark-shell \
+--jars /home_dir/svprihdp/bigred3/lib/jars/kelsa-1.9/kelsa-core_2.11-1.9.jar \
+--driver-memory 16g \
+--executor-memory 20g \
+--executor-cores 5 \
+--conf spark.speculation=true \
+--conf spark.sql.shuffle.partitions=250 \
+--conf spark.dynamicAllocation.enabled=true \
+--conf spark.dynamicAllocation.minExecutors=1 \
+
+import com.tgt.dsc.kelsa.datapipeline.core.validations.ValidationFunctions
+import com.tgt.dsc.kelsa.datapipeline.core.transformations._
+import java.sql.DriverManager
+import java.util.Properties
+import com.tgt.dsc.kelsa.datapipeline.core.curators.DeDupHelper
+import com.tgt.dsc.kelsa.datapipeline.core.service.DataReadWriteHelper
+import com.tgt.dsc.kelsa.datapipeline.core.types.TableDetails._
+import com.tgt.dsc.kelsa.datapipeline.core.types.TableDetails
+import com.tgt.dsc.kelsa.datapipeline.core.types.KelsaTypes.ValidateStructureContext
+import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StringType, StructType}
+import com.tgt.dsc.kelsa.datapipeline.core.transformations.TransFunctions._
+import org.apache.spark.storage.StorageLevel
+import java.io.File
+import com.typesafe.config.{Config, ConfigFactory}
+import com.tgt.dsc.kelsa.datapipeline.core.config.{InitialMetadataParam, PipeLineConfig}
+import org.apache.spark.sql.expressions.Window
+import org.apache.spark.sql.functions.lag
+import org.apache.spark.sql.{Column, DataFrame, SparkSession}
+import org.apache.spark.sql.functions.{col,hour,minute,second}
+
+
+
+
+
+
+val dimensionColumnsNames: Seq[String] = Seq("tcin")
+val drivingColumnName: String = "effective_d"
+val expiryColumnName: String = "expiry_d"
+val expiryDateDefaultValue: String = "9999-12-31"
+val dimensionColumns:Seq[Column]  = dimensionColumnsNames.map( colName => col(colName))
+val DATE_FORMAT_YYYY_MM: String  =  "yyyy-MM"
+
+val fndDF = spark.read.table("prd_priceent_fnd.price_item_metadata")
+            .drop(expiryColumnName)
+            .withColumn(expiryColumnName,
+        lead(col(drivingColumnName), 1, expiryDateDefaultValue).over(Window.partitionBy(dimensionColumns: _*).orderBy(drivingColumnName))
+      ).withColumn("expiry_d", to_date(col(expiryColumnName)).cast(StringType))
+       .withColumn("active_f", when(col(expiryColumnName).equalTo(expiryDateDefaultValue), "Y").otherwise("N"))    
+       .withColumn("expiry_year_month", date_format(col("expiry_d"), DATE_FORMAT_YYYY_MM) )
+
+
+
+
+reorderedDf.write.format("orc").mode("overwrite").insertInto("stg_priceent_wrk.price_item_metadata")
+
+
+CREATE EXTERNAL TABLE `stg_priceent_wrk.price_item_metadata`( 
+   `tcin` string COMMENT 'Target Corporation Item Number.Uniquely identifier for Target items',  
+   `dpci` string COMMENT 'dept class item unique identifier',  
+   `department_id` int COMMENT 'The fourth level in the Merchandise Hierarchy. Department is the primary merchandising classification of Target goods and services. It is used to identify large physical areas in retail stores or buy units by consumer segment. This is the natural/business id for the department',  
+   `class_id` int COMMENT 'The fifth level in the Merchandise Hierarchy. A class is a grouping of products based on more closely aligned product attributes than Merchandise Department. A class must be qualified by the department number. This is the natural/business id for the class',  
+   `msrp` double COMMENT 'Manufacturer Suggested Retail Price.it is the retail price of a good recommended by the manufacturer',  
+   `min_advertised_price_a` double COMMENT 'The Minimum Advertised Price (MAP). it is a restriction the manufacturer places on Target, which states that Target may not advertise that they are selling a product for less than the stated amount. The price will only be revealed to guests when they add the product to their cart on Target.com',  
+   `initial_regular_retail_a` double COMMENT 'The amount entered as the items initial regular retail (Launch Price)',  
+   `display_price_per_unit_f` boolean COMMENT 'This flag (maintained at the item level) designates whether or not Targets price per unit can be shown to digital guests based on item attribute validation done by Merch/item partners.The default is false for all items until validated and updated to true',  
+   `publish_msrp_f` boolean COMMENT 'This flag indicates if msrp will be published or not. Valid values are true or false. When true, the items MSRP will be shown on Target.com',  
+   `hide_price_f` string COMMENT 'This flag indicates whether or not an items price will be hidden on Target.com. This is primarily used for price varies items like phones with plans. Valid values are PRICE_VARIES or null.The default message will be null',  
+   `price_rounding_exclusion_f` boolean COMMENT 'This flag indicates if rounding rule exclusions need to be applied or not. Valid values  are true or false. When true, Target company rounding rules are not applicable to the item',  
+   `show_local_price_f` boolean COMMENT 'This flag indicates if the items store price (local price) will be shown online. Valid values are true or false. When true, the items store price (local price) will be shown online',  
+   `suppress_local_sale_f` boolean COMMENT 'This flag indicates if an items store price (local price) will be suppressed by an items promo/ sale price on Target.com. Valid values are true or false.When true, an items promo price will suppress its store price (local price)',  
+   `channel_price_indicator_c` string COMMENT 'This column holds the descriptions of channel pricing indicator for example  STORE-LED, ONLINE-LED , NONE',  
+   `price_message_desc` string COMMENT 'This is the custom text string/description that will be displayed to replace the price of an item on Target.com that has a hidden price Ex. Price varies. The default message will be null',  
+   `price_metadata_source_system_n` string COMMENT 'Source system Name that updated metadata value: ex  TARGET-PLUS, METADATA-API, APEX, LPP, CHANNEL-PRICING, IVY-PROMO',  
+   `price_metadata_update_utc_ts` string COMMENT 'Ivy metadata record update timestamp in UTC format',  
+   `price_metadata_update_user_id` string COMMENT 'The user ID (LAN ID) of the person who updated metadata',  
+   `online_strategy_anchor_id` int COMMENT 'Anchor id for online items. Valid values are  2 - Store-Led,0  -  None Yet,1  -  Online-Led',  
+   `online_strategy_anchor_desc` string COMMENT 'Anchor description for online items. Valid values 2 - Store-Led,0  -  None Yet,1  -  Online-Led',  
+   `online_strategy_segment_id` int COMMENT 'This gives the segment id of the item The possible values are 2,1 ,0 ,3,4',  
+   `online_strategy_segment_desc` string COMMENT 'Segment description for online  items The possible values 2 - KVI,1- SKVI,0-None Yet,3-FG,4-BG',  
+   `online_index_goal_percent` double COMMENT 'Index goal percentage for online items example 1.09,NULL,1.15,1.02,1.01. The index goal is used to determine an items competitive position relative to competitors',  
+   `online_price_strategy_id` int COMMENT 'This gives the strategy id (for online items) used to generate the recommendation for example 26, 3,NULL,0,13,24,19,2, 1',  
+   `online_price_strategy_desc` string COMMENT 'The descriptions for online items strategy  Valid values 3  -  Competitive Lowest,24 -   Analyst-Managed Price Probe,13 -   TPC Competitive Lowest,2 -   None Yet,26 -   Store-Led,2 -   Buyer-Managed,1 -   Analyst-Managed,0  -  None Yet,19 -   Competitive - Online Exclusion',  
+   `store_strategy_anchor_id` int COMMENT 'Anchor id for store items The possible values 2  -Store-Led,0-  Store,2  -Store, 0-  Online-Led, 0-  None Yet, 0-  Store-Led, NULL-  None Yet,1-  Online-Led',  
+   `store_strategy_anchor_desc` string COMMENT 'Anchor description for store items. The possible values    2  -Store-Led,0-  Store,2  -Store, 0-  Online-Led, 0-  None Yet, 0-  Store-Led, NULL-  None Yet,1-  Online-Led',  
+   `store_strategy_segment_id` int COMMENT 'This gives the segment id of the item 2  -Store-Led,0  - Store,2-Store,0-Online-Led,0-None Yet,0-Store-Led,NULL-None Yet,1-Online-Led',  
+   `store_strategy_segment_desc` string COMMENT 'Segment description for store items 2  -Store-Led,0  - Store,2-Store,0-Online-Led,0-None Yet,0-Store-Led,NULL-None Yet,1-Online-Led',  
+   `store_index_goal_percent` double COMMENT 'Index goal percentage for store items. example 1.09,NULL,1.15,1.02,1.01. The index goal is used to determine an items competitive position relative to competitors',  
+   `store_price_strategy_id` int COMMENT 'This gives the strategy id for store items for example 26, 3,NULL,0,13,24,19,2, 1',  
+   `store_price_strategy_desc` string COMMENT 'The descriptions for store items strategy ids. The valid values are 3 - Competitive Lowest, 24-Analyst-Managed Price Probe, 13- TPC Competitive Lowest, 2- None Yet, 26- Store-Led, 2- Buyer-Managed, 1- Analyst-Managed, 0- None Yet, 19- Competitive - Online Exclusion',  
+   `online_item_group_id` string COMMENT 'Ivy group identifier for online items.Example: 82ca250dd36011e68b38fa163e28879e',  
+   `online_item_group_n` string COMMENT 'This field holds online items group names.Example  Dreft 150oz',  
+   `online_item_members_parity_type_n` string COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor.This column defines the type of parity i.e PERCENT/DOLLAR ( $-20.0 / %  -72.0)',  
+   `online_item_members_parity_value` string COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor. This column holds the value ($-20.0 , %  -72.0)',  
+   `online_item_group_anchor_id` string COMMENT 'Group anchor tcins for online items Example 47238319',  
+   `online_item_group_delete_f` boolean COMMENT 'This indicates if the online item group is still active.Valid values are true or false',  
+   `online_item_members_delete_f` boolean COMMENT 'This field indicates whether an online item is still valid in the group. Valid values are true or false',  
+   `online_item_group_update_utc_ts` string COMMENT 'Online item group updated timestamp in UTC format',  
+   `online_item_group_update_user_id` string COMMENT 'The user ID (LAN ID) of the person who updated online groups',  
+   `online_member_update_user_id` string COMMENT 'The user ID (LAN ID) of the person who updated online members',  
+   `online_member_update_utc_ts` string COMMENT 'Online item MEMBER updated timestamp in UTC format',  
+   `store_item_group_id` string COMMENT 'Ivy group identifier for store items.Example 5057e54a2e8f11e7bbe5fa163e28879e',  
+   `store_item_group_n` string COMMENT 'This field holds store items group names.Example Oster&#174\; Simple Blend&#153\; 100 Blender - Black 006706',  
+   `store_item_members_parity_type_n` string COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor.This column defines the type of parity i.e PERCENT/DOLLAR ( $-20.0 / %  -72.0)',  
+   `store_item_members_parity_value` string COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor. This column holds the value.  ( $-20.0 / %  -72.0)',  
+   `store_item_group_anchor_id` string COMMENT 'Group anchor tcins for store items Example 51912717',  
+   `store_member_update_user_id` string COMMENT 'The user ID (LAN ID) of the person who updated store item members',  
+   `store_member_update_utc_ts` string COMMENT 'Store item member updated timestamp in UTC format',  
+   `store_item_group_delete_f` boolean COMMENT 'this indicates if the store item group is still active.',  
+   `store_item_members_delete_f` boolean COMMENT 'This field indicates whether a store item is still valid in the group. Valid values are true or false',  
+   `store_item_group_update_utc_ts` string COMMENT 'Store item group updated timestamp in UTC format',  
+   `store_item_group_update_user_id` string COMMENT 'Store items group update user ids. Example Lan id , ivyprice etc',  
+   `online_item_price_max_value` double COMMENT 'Price maximum is a non-required, user enterable field for the maximum price for an online item',  
+   `online_item_price_min_value` double COMMENT 'Price minimum is a non-required, user enterable field for the minimum price for an online item.',  
+   `store_item_price_max_value` double COMMENT 'Price maximum is a non-required, user enterable field for the maximum price for an store item.',  
+   `store_item_price_min_value` double COMMENT 'Price minimum is a non-required, user enterable field for the minimum price for an online item.',  
+   `online_match_msrp_f` boolean COMMENT 'The item guadrils maximum values matches with MSRP',  
+   `online_match_map_f` boolean COMMENT 'The item guadrils maximum values matches with MAP',  
+   `store_match_msrp_f` boolean COMMENT 'The item guadrils maximum values matches with MSRP',  
+   `store_match_map_f` boolean COMMENT 'The item guadrils maximum values matches with MAP',  
+   `effective_d` string COMMENT 'The date when the record was published from source in UTC format',  
+   `expiry_d` string COMMENT 'Expiry date of record  as part of the type 2 History data maintenance in UTC format',  
+   `batch_load_utc_ts` string COMMENT 'The time in UTC format during which the record was last updated in the CDS dataset',  
+   `active_f` string COMMENT 'It denotes version Y for active record and N for previous version or inactive record. Valid values are Y and N') 
+ PARTITIONED BY (                                   
+   `expiry_year_month` string COMMENT 'year-month  of an item derived from expiry_d column. Sample values 2020-01, 9999-12, ...') 
+   stored as orc
+   LOCATION 'hdfs://bigred3ns/user/SVPRIHDS/hive/stg_metadata_item_test'
+
+   // Define the desired column order
+val desiredColumnOrder = Seq(
+  "tcin",
+  "dpci",
+  "department_id",
+  "class_id",
+  "msrp",
+  "min_advertised_price_a",
+  "initial_regular_retail_a",
+  "display_price_per_unit_f",
+  "publish_msrp_f",
+  "hide_price_f",
+  "price_rounding_exclusion_f",
+  "show_local_price_f",
+  "suppress_local_sale_f",
+  "channel_price_indicator_c",
+  "price_message_desc",
+  "price_metadata_source_system_n",
+  "price_metadata_update_utc_ts",
+  "price_metadata_update_user_id",
+  "online_strategy_anchor_id",
+  "online_strategy_anchor_desc",
+  "online_strategy_segment_id",
+  "online_strategy_segment_desc",
+  "online_index_goal_percent",
+  "online_price_strategy_id",
+  "online_price_strategy_desc",
+  "store_strategy_anchor_id",
+  "store_strategy_anchor_desc",
+  "store_strategy_segment_id",
+  "store_strategy_segment_desc",
+  "store_index_goal_percent",
+  "store_price_strategy_id",
+  "store_price_strategy_desc",
+  "online_item_group_id",
+  "online_item_group_n",
+  "online_item_members_parity_type_n",
+  "online_item_members_parity_value",
+  "online_item_group_anchor_id",
+  "online_item_group_delete_f",
+  "online_item_members_delete_f",
+  "online_item_group_update_utc_ts",
+  "online_item_group_update_user_id",
+  "online_member_update_user_id",
+  "online_member_update_utc_ts",
+  "store_item_group_id",
+  "store_item_group_n",
+  "store_item_members_parity_type_n",
+  "store_item_members_parity_value",
+  "store_item_group_anchor_id",
+  "store_member_update_user_id",
+  "store_member_update_utc_ts",
+  "store_item_group_delete_f",
+  "store_item_members_delete_f",
+  "store_item_group_update_utc_ts",
+  "store_item_group_update_user_id",
+  "online_item_price_max_value",
+  "online_item_price_min_value",
+  "store_item_price_max_value",
+  "store_item_price_min_value",
+  "online_match_msrp_f",
+  "online_match_map_f",
+  "store_match_msrp_f",
+  "store_match_map_f",
+  "effective_d",
+  "expiry_d",
+  "batch_load_utc_ts",
+  "active_f",
+  "expiry_year_month"
+)
+
+// Assuming `df` is your original DataFrame
+val reorderedDf = fndDF.select(desiredColumnOrder.map(col): _*)
+
+// Show the reordered DataFrame
+reorderedDf.show()

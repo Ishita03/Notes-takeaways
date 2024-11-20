@@ -6,9 +6,10 @@ prod.coalesce(15).write.mode("overwrite").insertInto("stg_priceent_wrk.digital_m
 prod.select("load_d").distinct.show
 
 stg.coalesce(15).write.mode("overwrite").insertInto("prd_priceent_fnd.digital_maps")
-val stg_found = spark.read.table("stg_priceent_wrk.digital_maps_v2").where("load_d ='2024-07-17'")
 
-val stg_fnd = stg_found.withColumn("load_d",lit("2024-07-18"))
+val stg_found = spark.read.table("prd_priceent_fnd.digital_maps").where("load_d ='2024-09-17'")
+
+val stg_fnd = stg_found.withColumn("load_d",lit("2024-09-18"))
 
 val stg_curr = spark.read.table("stg_priceent_wrk.digital_maps_v2").where("load_d ='2024-07-18'")
 

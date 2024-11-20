@@ -1,0 +1,100 @@
+
+ThisBuild / name := "price_item_metadata_cds_dpp"
+ThisBuild / version := "1.0"
+ThisBuild / scalaVersion := "2.13.8"
+ThisBuild / organization := "com.tgt.de.price"
+
+val scope = Compile
+
+resolvers ++= Seq(
+  "Artifactory" at "https://binrepo.target.com/artifactory/kelsa/",
+  "jitpack" at "https://jitpack.io",
+  "Maven Artifactory" at "https://repo1.maven.org/maven2/",
+)
+ThisBuild / scapegoatVersion := "1.4.12"
+//coverage
+//coverageHighlighting := true
+//coverageEnabled in Test := true
+scapegoatReports := Seq("all")
+
+scapegoatDisabledInspections := Seq(
+  "NullAssignment",
+  "AsInstanceOf",
+  "CatchException",
+  "NullParameter",
+  "CatchThrowable",
+  "UnsafeTraversableMethods"
+)
+
+libraryDependencies ++= Seq(
+  "com.tgt.dsc.kelsa.datapipeline" % "kelsa-core_2.13" % "3.0.2",
+  "com.typesafe" % "config" % "1.4.2",
+  "org.scoverage" %% "scalac-scoverage-runtime" % "2.0.8",
+  "org.apache.spark" %% "spark-sql" % "3.5.1" % Provided,
+  "org.apache.spark" %% "spark-core" % "3.5.1" % Provided,
+  "org.scala-lang" % "scala-library" % "2.13.08" % Provided,
+  "org.scalatest" %% "scalatest" % "3.2.17" % Test  )
+
+libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.1.0"
+ThisBuild / evictionErrorLevel := Level.Warn
+
+lazy val root = (project in file("."))
+  .enablePlugins(BuildInfoPlugin)
+  // .enablePlugins(GitVersioning)
+  .settings(
+    name := "price_item_metadata_cds_dpp",
+    organization := "com.tgt.de.price.kelsa",
+    buildInfoKeys ++= Seq[BuildInfoKey](
+      resolvers,
+      libraryDependencies,
+      BuildInfoKey.map(name) {
+        case (k, v) => "project" + k.capitalize -> v.capitalize
+      },
+      BuildInfoKey.action("buildTime") {
+        System.currentTimeMillis
+      }
+    ),
+    buildInfoPackage := "com.tgt.de.price.metadatacds"
+  )
+
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
+}
+
+assembly / mainClass := Some("com.tgt.dsc.price.metadatacds.DataPipelineKickStarter")
+
+assembly / assemblyJarName := "price_item_metadata_3.5.1-2.13.08.jar"
+
+val token = sys.env.getOrElse("NEW_SONAR_TOKEN", "")
+
+sonarProperties ++= Map(
+  "sonar.host.url" -> "https://desonar.prod.target.com/",
+  "sonar.scala.version" -> "2.13",
+  "sonar.projectName" -> "price_item_metadata_cds_dpp",
+  "sonar.projectKey" -> "price_item_metadata_cds_dpp",
+  "sonar.sources" -> "src/main/scala",
+  "sonar.tests" -> "src/test/scala",
+  "sonar.junit.reportPaths" -> "target/test-reports",
+  "sonar.sourceEncoding" -> "UTF-8",
+  "sonar.exclusions" -> "src/**/services/HiveConnector*,src/**/PipelineInvoker*,src/**/services/PipeLineService*",
+  "sonar.buildbreaker.skip" -> "false",
+  "sonar.verbose" -> "true",
+  "sonar.scala.coverage.reportPaths" -> "target/scala-2.13.08/scoverage-report/scoverage.xml",
+  "sonar.scala.scapegoat.reportPath" -> "target/scala-2.13.08/scapegoat-report/scapegoat.xml",
+  "sonar.login" -> token,
+  "sonar.buildbreaker.skip" -> "true"
+
+)
+coverageExcludedPackages := "<empty>;.*HiveConnector$;.*PipeLineService$;.*PipelineInvoker$$"
+//coverageMinimum := 80
+//coverageFailOnMinimum := true
+Test / coverageEnabled := true
+test / coverageEnabled := true
+//how much code coverage is needed
+coverageMinimumStmtTotal :=80
+//fail the build if code coverage is not met
+coverageFailOnMinimum := true
+coverageHighlighting := true
+

@@ -1,0 +1,20 @@
+val stg_new = spark.read.table("prd_priceent_fnd.digital_maps").where("load_d='2026-09-27'")
+stg_new.count
+val stgnew26 = stg_new.where("update_utc_ts between '2024-09-26 00:00:00.000000 UTC' and '2024-09-26 23:00:00.000000 UTC'")
+stgnew26.count
+val found = spark.read.table("stg_priceent_wrk.digital_maps_v2").where("load_d='2024-09-25'")
+found.count
+val foundnew =found.withColumn("load_d",lit("2024-09-26"))
+foundnew.select("load_d").distinct.show
+val new26 = stgnew26.withColumn("load_d",lit("2024-09-26"))
+new26.count
+new26.select("load_d").distinct.show
+val finalnew26 = new26.union(foundnew)
+
+finalnew26.count
+
+finalnew26.write.mode("overwrite").format("orc").insertInto("stg_priceent_wrk.digital_maps_v2")
+
+val stg= spark.read.table("stg_priceent_wrk.digital_maps_v2").where("load_d>'2024-09-17'")
+
+stg.coalesce(20).write.mode("overwrite").format("orc").insertInto("prd_priceent_fnd.digital_maps")s

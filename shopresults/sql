@@ -3,7 +3,11 @@ val prd  = spark.read.table("prd_priceent_fnd.digital_shopresults").where("shop_
 
 val stg  = spark.read.table("stg_priceent_fnd.digital_shopresults").where("shop_crawl_d >= '2024-07-10' AND shop_crawl_d <= '2024-07-18'")
 val prd  = spark.read.table("prd_priceent_fnd.digital_shopresults").where("shop_crawl_d >= '2024-07-01''")
+
 prd.coalesce(20).write.mode("overwrite").format("orc").insertInto("stg_priceent_wrk.digital_shopresults_bkp")
+
+stg.coalesce(20).write.mode("overwrite").format("orc").insertInto("prd_priceent_fnd.digital_shopresults")
+
 
    val stgdf = stg.select(columns.map(col): _*)
 
@@ -123,3 +127,107 @@ prd.coalesce(20).write.mode("overwrite").format("orc").insertInto("stg_priceent_
  |-- source_system_n: string (nullable = true)
  |-- shop_crawl_d: string (nullable = true)
  |-- publish_week_end_d: string (nullable = true)
+
+
+INSERT OVERWRITE TABLE stg_priceent_fnd.digital_shopresults
+SELECT
+tcin
+,null AS crawl_id
+,retailer_short_n
+,competitor_product_id
+,crawl_url
+,shopped_crawl_utc_ts
+,is_buy_box_winner_f
+,is_buy_box_fulfiller_f
+,offer_retail_a
+,regular_retail_a
+,competitor_retail_a
+,currency_c
+,newton_availability_c
+,promo_message_t
+,zip_c
+,state_c
+,city_n
+,null AS saved_html_link
+,null AS competitor_product_title
+,sku
+,digital_other_attributes_struct.isbn10 AS competitor_isbn10
+,digital_other_attributes_struct.isbn13 AS competitor_isbn13
+,upc
+,null AS item_model_number
+,null AS review_count
+,null AS star_rating
+,null AS crawled_variant_attribute_n
+,null AS crawled_variant_attribute_value
+,product_desc
+,null AS seller_id
+,buy_box_winner_n
+,buy_box_fulfiller_n
+,null AS buy_box_info_seller_id
+,null AS item_condition_value
+,null AS item_condition_additional_information
+,array(named_struct('currency', cast(null as string) ,'price', cast(null as string) ,'type', cast(null as string)) ) AS raw_competitor_seller_price_data_arr
+,inventory_availability_desc AS seller_item_online_availability
+,null AS seller_item_buyability
+,null AS seller_promo_information
+,null AS seller_review_count
+,null AS seller_start_rating
+,digital_other_attributes_struct.istargetplus AS  is_market_place_f
+,dpci
+,department_id
+,audit_status_f
+,shop_validity_f
+,shop_channel
+,data_provider_c
+,source_system_n
+,shop_crawl_d
+,publish_week_end_d
+FROM prd_priceent_fnd.competitor_shopresults
+WHERE publish_week_end_d = '2024-09-07' 
+AND source_system_n='Newton'
+
+
+SELECT count(1), from_unixtime(unix_timestamp(shopped_utc_ts, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), 'yyyy-MM-dd') AS crawl_d
+  , data_provider_c
+FROM  prd_priceent_fnd.competitor_price_aggregates
+  where publish_week_end_d = '2024-09-21' 
+  group by from_unixtime(unix_timestamp(shopped_utc_ts, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"), 'yyyy-MM-dd'), data_provider_c
+
+
+scala> val stgnew71 =stgnew7.withColumn("load_d",lit("2024-09-07"))
+stgnew71: org.apache.spark.sql.DataFrame = [channel_n: string, competitor_short_name: string ... 30 more fields]
+
+scala> stgnew71.select("load_d").distinct.show
++----------+
+|    load_d|
++----------+
+|2024-09-07|
++----------+
+
+
+scala> stgnew71.write.mode("append").format("orc").insertInto("stg_priceent_wrk.digital_maps_v2")
+
+scala> val stgnew8 = stg_new.where("update_utc_ts between '2024-09-08 00:00:00.000000 UTC' and '2024-09-08 23:00:00.000000 UTC'")
+stgnew8: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [channel_n: string, competitor_short_name: string ... 30 more fields]
+
+scala> val stgnew8 = stg_new.where("update_utc_ts between '2024-09-08 00:00:00.000000 UTC' and '2024-09-08 23:00:00.000000 UTC'")
+stgnew8: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] = [channel_n: string, competitor_short_name: string ... 30 more fields]
+
+scala> val stgnew71 =stgnew8.withColumn("load_d",lit("2024-09-08"))
+stgnew71: org.apache.spark.sql.DataFrame = [channel_n: string, competitor_short_name: string ... 30 more fields]
+
+scala> val stgnew81 =stgnew8.withColumn("load_d",lit("2024-09-08"))
+stgnew81: org.apache.spark.sql.DataFrame = [channel_n: string, competitor_short_name: string ... 30 more fields]
+
+scala> stgnew81.count
+res13: Long = 78
+
+scala> stgnew81.select("load_d").distinct.sho
+<console>:26: error: value sho is not a member of org.apache.spark.sql.Dataset[org.apache.spark.sql.Row]
+       stgnew81.select("load_d").distinct.sho
+                                          ^
+
+scala> stgnew81.select("load_d").distinct.show
++----------+
+
+

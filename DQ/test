@@ -1,0 +1,5 @@
+hdfs dfs -put -f getMaxDate.sh hdfs://bigred3ns/user/SVPRIHDP/priceinsights/prd/OmniChannelProductMapping/DPP/
+
+
+insert overwrite table stg_priceent_fnd.item_price_aggregates select * from prd_priceent_wrk.test_aravind_delete 
+where retail_day_d in ('2023-10-31','2023-10-30','2023-11-01','2023-11-02','2023-11-03','2023-11-04')

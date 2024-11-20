@@ -1,0 +1,41 @@
+before migration
+
+29th 08 run 
+fetchFoundationCount" : 25419913  ----> foundation fetch (28th)
+CDSRowsCount" : 25451170
+
+
+30th run 
+fetchFoundationCount" : 25451170
+CDSRowsCount" : 25480033
+
+31st run
+fetchFoundationCount" : 25480033
+CDSRowsCount" : 25497576
+
+
+after migration
+
+16th sept
+fetchFoundationCount=25532804 (15th)
+CDSRowsCount=25540031
+
+17th sept
+fetchFoundationCount" : 25639369 (16th )
+"CDSRowsCount" : 25665678     
+
+18th sept 
+fetchFoundationCount" : 25504137 (17th)  
+CDSRowsCount" : 25582069   (we are getting 25498295)
+
+
+18th sept run:-
+
+"DataQualityPassRowsCount" : 436372, "endEpochTime" : 1726617062, "DecorationRowsCount" : 0,
+ "TransformationFailRowsCount" : 0, "applicationId" : "application_1725287654266_2028151", "validationFailedRows" : 0, 
+ "DuplicatedRowsCount" : 777442, "DPPJobStatus" : "SUCCESS", "DataQualityFailRowsCount" : 0, "rowsProcessedDPP" : 1213814,
+  "MissingColumnRowsCount" : 0, "ProcessingThroughputPerSecond" : 3903.0, "CorruptRowsCount" : 0, "NewColumnRowsCount" : 0, 
+  "ExplodedInputRowsCount" : 1213814, "CDSRowsCount" : 25582069, "DedupRowsCount" : 436372, "TransformationRowsCount" : 436372,
+   "EnrichmentFailRowsCount" : 0, "dateofdata" : 0, "keyColNullCount" : 0, "startEpochTime" : 1726616751,
+    "fetchFoundationCount" : 25504137, "InputRowsCount" : 1213814, "CDSStagingCount" : 0, "DataTypePassRowsCount" : 0, 
+    "DataTypeFailRowsCount" : 0, "ProcessingRunTimeInSeconds" : 31

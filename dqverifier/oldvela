@@ -1,0 +1,31 @@
+  - name: deploy to stage edge node
+    image: golang:1.13
+    ruleset:
+      branch: [ dq-r1 ]
+      event: push
+    secrets: [ SVPRIHDS_ORG_SSH_PVT_KEY ]
+    commands:
+        - mkdir ${HOME}/.ssh
+        - IDENTITY_FILE=${HOME}/.ssh/identity_rsa
+        - echo "${SVPRIHDS_ORG_SSH_PVT_KEY}" > ${IDENTITY_FILE}
+        - chmod 600 ${IDENTITY_FILE}
+        - scp -i ${IDENTITY_FILE} -o StrictHostKeyChecking=no target/scala-2.11/*.jar SVPRIHDS@edge.bigred3.target.com:/home_dir/svprihds/dq-verifier/
+        - scp -i ${IDENTITY_FILE} -o StrictHostKeyChecking=no src/main/resources/run-dq-verifier.sh SVPRIHDS@edge.bigred3.target.com:/home_dir/svprihds/dq-verifier/
+
+
+  - name: build jar
+    image: mozilla/sbt:8u232_1.3.7
+    ruleset:
+      branch: [ dq-r1 ]
+      event: [ push, pull_request ]
+    secrets: [NEW_SONAR_TOKEN]
+    commands:
+      - sbt clean compile assembly
+
+
+      inputDF.coalesce(100).write.format("orc").mode("overwrite").insertInto("stg_priceent_fnd.item_location_price_aggregates")
+
+      val stg= spark.read.table("prd_priceent_fnd.item_location_price_aggregates").where("retail_day_d>='2024-10-09'")
+
+       val dedup=stg.distinct()
+
