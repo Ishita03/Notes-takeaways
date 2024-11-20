@@ -1,0 +1,54 @@
+select count(*) ,retail_day_d from prd_priceent_tmp.item_location_price_aggregates
+where retail_day_d >'2023-10-25'
+group by retail_day_d
++-------------+---------------+
+|     _c0     | retail_day_d  |
++-------------+---------------+
+| 1248060296  | 2023-10-28    |
+| 1240312786  | 2023-10-30    |
+| 1244970850  | 2023-10-26    |
+| 1245515365  | 2023-10-27    |
+| 1246083485  | 2023-10-29    |
++-------------+---------------+
+
+
+select count(*) ,retail_day_d from prd_priceent_fnd.item_location_price_aggregates
+where retail_day_d >'2023-10-25'
+group by retail_day_d
+
++-------------+---------------+
+|     _c0     | retail_day_d  |
++-------------+---------------+
+| 1248060296  | 2023-10-28    |
+| 1240312786  | 2023-10-30    |
+| 1244970850  | 2023-10-26    |
+| 1245515365  | 2023-10-27    |
+| 1246083485  | 2023-10-29    |
++-------------+---------------+
+
+select count(*) ,retail_day_d from prd_priceent_tmp.item_price_aggregates
+where retail_day_d >'2023-10-25'
+group by retail_day_d
+
++-----------+---------------+
+|    _c0    | retail_day_d  |
++-----------+---------------+
+| 7085246   | 2023-10-28    |
+| 21196542  | 2023-10-30    |
+| 7072592   | 2023-10-26    |
+| 7081944   | 2023-10-27    |
+| 7063628   | 2023-10-29    |
+
+select count(*) ,retail_day_d from prd_priceent_fnd.item_price_aggregates
+where retail_day_d >'2023-10-25'
+group by retail_day_d
+
++-----------+---------------+
+|    _c0    | retail_day_d  |
++-----------+---------------+
+| 14170492  | 2023-10-28    |
+| 14131028  | 2023-10-30    |
+| 14145184  | 2023-10-26    |
+| 14163888  | 2023-10-27    |
+| 14127256  | 2023-10-29    |
++-----------+---------------+

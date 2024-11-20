@@ -1,0 +1,19 @@
++---------------------------+---------------------------------+------------------------------------+--------------------------+
+| online_price_strategy_id  |   online_price_strategy_desc    |     store_price_strategy_desc      | store_price_strategy_id  |
++---------------------------+---------------------------------+------------------------------------+--------------------------+
+| 1                         | Analyst-Managed                 | Analyst Managed - Fast Follow      | 28                       |
+| 3                         | Competitive Lowest              | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 3                         | Competitive Lowest              | Analyst Managed - Fast Follow      | 28                       |
+| 19                        | Competitive - Online Exclusion  | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 19                        | Competitive - Online Exclusion  | Analyst Managed - Fast Follow      | 28                       |
+| 24                        | Analyst-Managed Price Probe     | Analyst Managed - Fast Follow      | 28                       |
+| 26                        | Store-Led                       | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 26                        | Store-Led                       | Analyst Managed - Fast Follow      | 28                       |
+| 0                         | None Yet                        | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 1                         | Analyst-Managed                 | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 2                         | Buyer-Managed                   | Analyst Managed - Pre-Fast Follow  | 23                       |
+| 2                         | Buyer-Managed                   | Analyst Managed ? Pre-Fast Follow  | 23                       |
+| 2                         | Buyer-Managed                   | Analyst Managed - Fast Follow      | 28                       |
+| 24                        | Analyst-Managed Price Probe     | Analyst Managed - Pre-Fast Follow  | 23                       |
++---------------------------+---------------------------------+------------------------------------+--------------------------+
+

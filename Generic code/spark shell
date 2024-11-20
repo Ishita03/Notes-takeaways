@@ -1,0 +1,14 @@
+  
+  spark-shell --jars /home_dir/z006dkh/bigred3/lib/jars/deequ-1.0.2.jar,/home_dir/svprihdp/bigred3/lib/jars/kelsa-1.8/kelsa-core_2.11-1.8.4.jar  --conf spark.sql.hive.hiveserver2.jdbc.url="jdbc:hive2://brcn1003.target.com:2181,brcn1004.target.com:2181,brcn1008.target.com:2181,brcn1009.target.com:2181,brcn1012.target.com:2181/;serviceDiscoveryMode=zooKeeperHA;zooKeeperNamespace=llap0-hs2ha"  --conf spark.sql.files.ignoreMissingFiles=true
+
+
+  
+  
+  val marketDF = spark.read.table("prd_priceent_fnd.target_competitor_location_mapping").select("LOCATION_ID",  "GROUP_ID",  "GROUP_N",  "GROUP_TYPE_N", "CLUSTER_PROFILE_ID").filter(col("LOAD_D") = "2023-10-15")
+
+val marketDF = spark.read.table("prd_priceent_fnd.target_competitor_location_mapping").select("LOCATION_ID", "GROUP_ID", "GROUP_N", "GROUP_TYPE_N", "CLUSTER_PROFILE_ID").filter(col("LOAD_D") === "2023-10-15")
+
+
+ val max_part = "2023-11-05"
+    val yesterdayDF = spark.read.table("prd_priceent_wrk.item_price_aggregates").filter(col("retail_day_d") === max_part && col("change_value_c") =!= "D")
+     

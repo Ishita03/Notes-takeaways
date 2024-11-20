@@ -1,0 +1,226 @@
+val itemschema = StructType(
+    StructField("alternate_images_arr", ArrayType(StringType)) ::
+    StructField("average_timeframe_to_sell_q", IntegerType) ::
+    StructField("back_order_type", StringType) ::
+    StructField("barcode", StringType) ::
+    StructField("barcode_type", StringType) ::
+    StructField("brand_arr", ArrayType(
+      StructType(
+        Array(
+          StructField("hasRoyalty", BooleanType),
+          StructField("id", IntegerType),
+          StructField("isGuestFacing", BooleanType),
+          StructField("isPrimary", BooleanType),
+          StructField("isPrimaryLicensedPersonality", BooleanType),
+          StructField("isPrimaryLicensedProperty", BooleanType),
+          StructField("isTargetOwned", BooleanType),
+          StructField("name", StringType),
+          StructField("typeName", StringType)
+        )
+      )
+    )) ::
+    StructField("brand_id", IntegerType) ::
+    StructField("brand_n", StringType) ::
+    StructField("brand_royalty_f", BooleanType) ::
+    StructField("brand_type_n", StringType) ::
+    StructField("buy_uom", StringType) ::
+    StructField("child_dpci_arr", ArrayType(StringType)) ::
+    StructField("child_tcin_arr", ArrayType(StringType)) ::
+    StructField("class_c", StringType) ::
+    StructField("class_id", IntegerType) ::
+    StructField("class_n", StringType) ::
+    StructField("color_family_name_arr", ArrayType(StringType)) ::
+    StructField("color_name_arr", ArrayType(StringType)) ::
+    StructField("component_dpci_arr", ArrayType(StringType)) ::
+    StructField("component_tcin_arr", ArrayType(StringType)) ::
+    StructField("department_id", IntegerType) ::
+    StructField("department_n", StringType) ::
+    StructField("distribution_center_service_strategy_id", StringType) ::
+    StructField("division_id", IntegerType) ::
+    StructField("division_n", StringType) ::
+    StructField("downstream_desc", StringType) ::
+    StructField("dpci", StringType) ::
+    StructField("estore_item_status_c", StringType) ::
+    StructField("estore_item_status_n", StringType) ::
+    StructField("giftcard_delivery_channel_n", StringType) ::
+    StructField("giftcard_event_id", StringType) ::
+    StructField("group_id", IntegerType) ::
+    StructField("group_n", StringType) ::
+    StructField("guest_return_permanent_policy_id", ArrayType(IntegerType)) ::
+    StructField("guest_return_policy_day_count", ArrayType(IntegerType)) ::
+    StructField("guest_return_policy_end_date_ct_ts", ArrayType(TimestampType)) ::
+    StructField("guest_return_policy_id", ArrayType(IntegerType)) ::
+    StructField("guest_return_policy_start_date_ct_ts", ArrayType(TimestampType)) ::
+    StructField("guest_return_policy_type", ArrayType(StringType)) ::
+    StructField("guest_return_policy_user_type", ArrayType(StringType)) ::
+    StructField("guest_return_special_policy_id", ArrayType(IntegerType)) ::
+    StructField("has_bottle_deposit_f", BooleanType) ::
+    StructField("has_lead_disclosure_f", BooleanType) ::
+    StructField("hazardous_class_type_c", IntegerType) ::
+    StructField("hazmat_c", StringType) ::
+    StructField("hazmat_n", StringType) ::
+    StructField("image_base_url", StringType) ::
+    StructField("import_designation_desc", StringType) ::
+    StructField("intended_launch_utc_ts", TimestampType) ::
+    StructField("intended_selling_channels_arr", ArrayType(StringType)) ::
+    StructField("is_auto_defective_f", BooleanType) ::
+    StructField("is_back_order_eligible_f", BooleanType) ::
+    StructField("is_charge_back_f", BooleanType) ::
+    StructField("is_child_primary_f", BooleanType) ::
+    StructField("is_child_sold_separately_f", BooleanType) ::
+    StructField("is_compliance_ready_f", BooleanType) ::
+    StructField("is_environmentally_sensitive_f", BooleanType) ::
+    StructField("is_expiring_item_f", BooleanType) ::
+    StructField("is_flammable_f", BooleanType) ::
+    StructField("is_gift_wrap_eligible_f", BooleanType) ::
+    StructField("is_guest_facing_brand_f", BooleanType) ::
+    StructField("is_hazmat_f", BooleanType) ::
+    StructField("is_hazmat_publishable_f", BooleanType) ::
+    StructField("is_infinite_inventory_f", BooleanType) ::
+    StructField("is_ingestible_f", BooleanType) ::
+    StructField("is_market_place_f", BooleanType) ::
+    StructField("is_master_f", BooleanType) ::
+    StructField("is_merchant_approved_for_publishing_f", BooleanType) ::
+    StructField("is_orderable_f", BooleanType) ::
+    StructField("is_parent_f", BooleanType) ::
+    StructField("is_post_office_box_prohibited_f", BooleanType) ::
+    StructField("is_primary_licensed_personality_f", BooleanType) ::
+    StructField("is_primary_licensed_property_f", BooleanType) ::
+    StructField("is_product_recalled_f", BooleanType) ::
+    StructField("is_retail_ticketed_f", BooleanType) ::
+    StructField("is_rfid_enabled_f", BooleanType) ::
+    StructField("is_sellable_f", BooleanType) ::
+    StructField("is_shipped_in_original_container_f", BooleanType) ::
+    StructField("is_shipped_in_own_container_f", BooleanType) ::
+    StructField("is_snap_eligible_f", BooleanType) ::
+    StructField("is_target_owned_brand_f", BooleanType) ::
+    StructField("is_weight_required_f", BooleanType) ::
+    StructField("item_create_type", StringType) ::
+    StructField("item_first_received_d", DateType) ::
+    StructField("item_highlights_bullets", StringType) ::
+    StructField("item_specifications_bullets_arr", ArrayType(StringType)) ::
+    StructField("item_state_n", StringType) ::
+    StructField("item_title", StringType) ::
+    StructField("item_type_category_type", StringType) ::
+    StructField("item_type_id", IntegerType) ::
+    StructField("item_type_n", StringType) ::
+    StructField("item_url", StringType) ::
+    StructField("item_video_count", IntegerType) ::
+    StructField("kafka_ct_ts", TimestampType) ::
+    StructField("kafka_offset", LongType) ::
+    StructField("kit_type", StringType) ::
+    StructField("launch_utc_ts", TimestampType) ::
+    StructField("license_personality_id", IntegerType) ::
+    StructField("license_personality_n", StringType) ::
+      StructField("license_property_id", IntegerType) ::
+      StructField("license_property_n", StringType) ::
+      StructField("lifecycle_item_complete_utc_ts", TimestampType) ::
+      StructField("lifecycle_status_c", StringType) ::
+      StructField("lifecycle_status_n", StringType) ::
+      StructField("mandatory_mta_completion_ct_ts", TimestampType) ::
+      StructField("manufacturer_style_id", StringType) ::
+      StructField("master_dpci_arr", ArrayType(StringType)) ::
+      StructField("master_tcin_arr", ArrayType(StringType)) ::
+      StructField("maximum_back_order_q", IntegerType) ::
+      StructField("maximum_preorder_q", IntegerType) ::
+      StructField("media_format", StringType) ::
+      StructField("merchandise_presentation_hanger_code_arr", ArrayType(StringType)) ::
+      StructField("merchandise_presentation_type_code_arr", ArrayType(StringType)) ::
+      StructField("merchandise_presentation_type_name_arr", ArrayType(StringType)) ::
+      StructField("merchandise_type_id", StringType) ::
+      StructField("merchandise_type_n", StringType) ::
+      StructField("minimum_age", IntegerType) ::
+      StructField("minimum_store_shelf_life_number", IntegerType) ::
+      StructField("minimum_timeframe_to_sell_number", IntegerType) ::
+      StructField("net_content_quantity_a", FloatType) ::
+      StructField("net_content_quantity_c", StringType) ::
+      StructField("node_ids_arr", ArrayType(StringType)) ::
+      StructField("number_of_boxes_per_shipment_q", IntegerType) ::
+      StructField("organic_c", StringType) ::
+      StructField("organic_n", StringType) ::
+      StructField("package_depth_number", FloatType) ::
+      StructField("package_dimension_uom", StringType) ::
+      StructField("package_dimensions_source_n", StringType) ::
+      StructField("package_height_number", FloatType) ::
+      StructField("package_weight_a", FloatType) ::
+      StructField("package_weight_c", StringType) ::
+      StructField("package_width_number", FloatType) ::
+      StructField("parcel_shipping_options_arr", ArrayType(StringType)) ::
+      StructField("parent_dpci_arr", ArrayType(StringType)) ::
+      StructField("parent_tcin_arr", ArrayType(StringType)) ::
+      StructField("pattern_id_arr", ArrayType(StringType)) ::
+      StructField("pattern_name_arr", ArrayType(StringType)) ::
+      StructField("prepaid_segment_denomination_a", StringType) ::
+      StructField("prep_code_ship_from_store", StringType) ::
+      StructField("primary_distribution_mode_n", StringType) ::
+      StructField("primary_fulfillment_location_c", StringType) ::
+      StructField("primary_image", StringType) ::
+      StructField("primary_vendor_id", StringType) ::
+      StructField("processed_ct_ts", TimestampType) ::
+      StructField("product_id_arr", ArrayType(StringType)) ::
+      StructField("product_relationship_type_c", StringType) ::
+      StructField("product_relationship_type_n", StringType) ::
+      StructField("product_sub_type_id", IntegerType) ::
+      StructField("product_sub_type_n", StringType) ::
+      StructField("product_type_id", IntegerType) ::
+      StructField("product_type_n", StringType) ::
+      StructField("purchase_limit_number", FloatType) ::
+      StructField("reasons_not_ready_for_launch_arr", ArrayType(StringType)) ::
+      StructField("reasons_not_site_published_arr", ArrayType(StringType)) ::
+      StructField("receiving_facility_type_n", StringType) ::
+      StructField("relationship_type_c", StringType) ::
+      StructField("relationship_type_n", StringType) ::
+      StructField("release_d", DateType) ::
+      StructField("return_method_c", StringType) ::
+      StructField("return_method_n", StringType) ::
+      StructField("shelf_label_desc", StringType) ::
+      StructField("shipping_carrier_type", StringType) ::
+      StructField("shipping_exclusions_arr", ArrayType(StructType(
+        Array(
+          StructField("code", StringType),
+          StructField("name", StringType)
+        )
+      ))) ::
+      StructField("shipping_methods_arr", ArrayType(StructType(
+        Array(
+          StructField("code", StringType),
+          StructField("name", StringType)
+        )
+      ))) ::
+      StructField("short_desc", StringType) ::
+      StructField("size_chart_url", StringType) ::
+      StructField("size_group_name_arr", ArrayType(StringType)) ::
+      StructField("size_id_arr", ArrayType(StringType)) ::
+      StructField("storage_temperature_zone", StringType) ::
+      StructField("street_ct_ts", TimestampType) ::
+      StructField("street_d", DateType) ::
+      StructField("style_c", StringType) ::
+      StructField("style_id", StringType) ::
+      StructField("style_n", StringType) ::
+      StructField("sub_class_c", StringType) ::
+      StructField("sub_class_id", IntegerType) ::
+      StructField("sub_class_n", StringType) ::
+      StructField("sub_group_id", IntegerType) ::
+      StructField("sub_group_n", StringType) ::
+      StructField("tax_c", StringType) ::
+      StructField("tcin", StringType) ::
+      StructField("threshold_quantity_arr", ArrayType(IntegerType)) ::
+      StructField("total_product_shelf_life_q", IntegerType) ::
+      StructField("total_threshold_q", IntegerType) ::
+      StructField("to_sell_timeframe_uom", StringType) ::
+      StructField("units_per_package_q", FloatType) ::
+      StructField("unpublish_reason_c", StringType) ::
+      StructField("unpublish_reason_n", StringType) ::
+      StructField("variation_theme_arr", ArrayType(StructType(
+        Array(
+          StructField("name", StringType),
+          StructField("swatchImage", StringType),
+          StructField("value", StringType)
+        )
+      ))) ::
+      StructField("vendor_description_n", StringType) ::
+      StructField("vendor_n", StringType) ::
+      StructField("vendor_seller_id", StringType) ::
+      StructField("waste_type_c", StringType) ::
+      StructField("waste_type_n", StringType) ::
+      Nil)

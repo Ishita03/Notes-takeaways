@@ -1,0 +1,926 @@
+CREATE EXTERNAL TABLE external_table_name (
+    column1 datatype1,
+    column2 datatype2,
+    ...
+)
+LOCATION 'hdfs://path/to/external/table';
+
+
+INSERT INTO TABLE prd_priceent_fnd.target_competitor_location_mapping_ext PARTITION(load_d) SELECT * FROM prd_priceent_fnd.target_competitor_location_mapping;
+
+INSERT INTO TABLE external_table_name PARTITION (partition_column1=value1, partition_column2=value2, ...)
+SELECT * FROM managed_table_name WHERE partition_column1=value1 AND partition_column2=value2;
+
+CREATE EXTERNAL TABLE prd_priceent_fnd.target_competitor_location_mapping_ext (
+location_id int COMMENT 'This is the location identifier of the Target Store. Example values: 1375,1146',
+group_id string COMMENT 'This is the target group id created for a unique group used in the mapping hierarchy. A target group can have one/multiple
+locations mapped to it based on the type of the group and cluster profile. Example value: LT2519',
+group_type_n string COMMENT 'This is the type of the particular group. It can be LOCAL,ZONE,MARKET etc',
+cluster_profile_id string COMMENT 'This indicates the id of a particular cluster profile. Cluster profile is the root of the mapping hierarchy in locations
+mapping. It is a collection of specific maps between Target and competitor groups. This mapping can differ based on different cluster profiles. This is added since we get competitor data from different source and due to that mapping may be different. Example values: DEFAULT_LOCAL_NWS,DEFAULT_MARKET_RDT,DEFAULT_LOCAL_RDE',
+cluster_profile_desc string COMMENT 'This is the complete description of the above cluster profile.',
+cluster_profile_n string COMMENT 'This gives the name of the particular cluster profile.Example values:NWS Default Local Cluster,RDE Default Local Cluster',
+cluster_profile_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person which last updated the cluster profile related information in source database.Example values: z001lgx',
+group_details_t string COMMENT 'This field will hold any metadata attributes tied to the group such as group centroid information etc.',
+group_n string COMMENT 'This is the group name of the group id created for a unique target group used in mapping. It can be a state name/market name based on the group_type attribute.Example values: New Orleans,San Antonio,Minneapolis',
+parent_group_id string COMMENT 'This is the parent group ID to another to another group, and is applicable to only group type of Market and Zone.Example values: T32',
+group_active_status_f string COMMENT 'This flag indicates the status of the target group being used in mapping process. Valid values are True and False. A True status indicates the group is active. False indicates the group is not active ',
+group_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person who last updated the target group information in the source database. Example value : z001lgx',
+group_member_id string COMMENT 'This is the group member id created for a unique target group to target location mapping. Example value: WMART542_LW541874,2519_LT2519',
+location_active_status_f string COMMENT 'This flag indicates the status of the target location being used in mapping process. Valid values are True and False. A True status indicates the location is active. False indicates the location is not active',
+location_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person who last updated the location id related information in the source database.Example values: z001lgx',
+competitor_location_id string COMMENT 'This is the location identifier of the Competitor Store. Example value :  WMART5683',
+competitor_short_n string COMMENT 'This indicates the short and simplified name for a particular competitor store e.g WMART for Walmart',
+competitor_location_active_status_f string COMMENT 'This flag indicates the status of the competitor location being used in mapping process. Valid values are True and False. A True status indicates the location is active. False indicates the location is not active ',
+competitor_location_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person who last updated the competitor location id related information in the source database.Example value: z001lgx',
+competitor_group_member_id string COMMENT 'This is the group member id created for a unique competitor group to competitor location mapping. Example value: 1450_LT1450',
+competitor_group_id string COMMENT 'This is the target group id created for a unique group used in the mapping hierarchy. A target group can have one/multiple
+locations mapped to it based on the type of the group and cluster profile. Example value: LW1450',
+competitor_group_type_n string COMMENT 'This is the type of the particular competitor group. It can be LOCAL,ZONE,MARKET etc.',
+competitor_group_n string COMMENT 'This is the group name of the group id created for a unique competitor group used in mapping. It can be a state name/market name based on the group_type attribute.Example values: Minneapolis',
+competitor_group_details_t string COMMENT 'This field will hold any metadata attributes tied to the competitor group such as group centroid information etc.',
+competitor_group_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person who last updated the competitor group information in source database.Example value: z001lgx',
+competitor_group_active_status_f string COMMENT 'This flag indicates the status of the competitor group being used in mapping process. Valid values are True and False. A True status indicates the group is active. False indicates the group is not active',
+cluster_map_id string COMMENT 'This is the unique id created for a map that is created between target and competitor groups.Example value: DEFAULT-1NWSLT1450LW541874',
+map_active_status_f string COMMENT 'This flag indicates the status of the map being used in mapping process. Valid values are True and False. A True status indicates the map is active. False indicates the map is not active',
+map_update_user_id string COMMENT 'This is the user id(zid/automated id) of the process/person who last updated the cluster map information in the source database.Example value:z001lgx',
+address_t string COMMENT 'This indicates the address of the competitor location.Example values: 7150 Gale Ave,455 Elk Grove Blvd',
+city_n string COMMENT 'This indicates the city of the competitor location.Example values: Elk Grove,Hacienda Heights',
+state_c string COMMENT 'This indicates the state_code of the competitor location.Example values: CA,TX',
+zip_c string COMMENT 'This is the zipcode of the competitor location.Example values: 9575.,891',
+retail_data_reference_id string COMMENT 'Every Competitor data provider has their own convention to name a physical store. This field references the associated to
+shopright location id to Newton competitor id.Example values:4691,8258,6897',
+store_number int COMMENT 'This gives the numeric version of the competitor location id for join purposes. For example if cmpt_loc_id is WMART4321 this
+will be 4321.',
+newton_reference_id string COMMENT 'Every Competitor data provider has their own convention to name a physical store, This field references the associated to
+shopright location id to Newton competitor id.Example values: WMART5683,WMART2251',
+location_n string COMMENT 'This is the name/format  of the competitor location Ex : Walmart Supercenter,Walmart Neighborhood Mkt',
+location_url string COMMENT 'This indicates the url of the competitor location.Example value: https://www.walmart.com/store/2251',
+channel_n string COMMENT 'This is the channel_type of the location . For example for walmart.com this will be ONLINE, for walmart stores it will be STORE',
+longitude double COMMENT 'This gives the longitude coordinate of the competitors geographic location.Example values: -121.39202,-117.93236',
+latitude double COMMENT 'This gives the latitude coordinate of the competitors geographic location.Example values: 33.998396,38.410207',
+retailer_n string COMMENT 'This is the full name of the competitor retailer.Example value: WALMART')
+PARTITIONED BY (
+load_d string COMMENT 'This is partition timestamp and indicates when the data load happened for a particular record/location')
+stored as orc
+LOCATION
+'/user/SVPRIHDP/hive/cluster_mapping_data/external'
+TBLPROPERTIES (
+'ORC.COMPRESS'='SNAPPY'
+);
+target_competitor_location_mapping
+
+INSERT INTO TABLE prd_priceent_tmp.omnichannel_price_recommendations PARTITION(recommendation_d) 
+SELECT * FROM prd_priceent_fnd.omnichannel_price_recommendations where recommendation_d>'2023-09-27'
+
+INSERT OVERWRITE TABLE stg_priceent_fnd.omnichannel_price_recommendations PARTITION(recommendation_d) 
+SELECT * FROM prd_priceent_fnd.omnichannel_price_recommendations where recommendation_d>='2023-08-01'
+
+
+
+INSERT INTO TABLE prd_priceent_tmp.omnichannel_price_recommendations 
+SELECT * FROM prd_priceent_fnd.omnichannel_price_recommendations
+
+INSERT INTO TABLE prd_priceent_tmp.target_competitor_location_mapping_bkp PARTITION(load_d) 
+SELECT * FROM prd_priceent_fnd.target_competitor_location_mapping where load_d >='2023-09-26'
+
+INSERT INTO TABLE stg_priceent_tmp.target_competitor_location_mapping_ext PARTITION(load_d) 
+SELECT * FROM prd_priceent_fnd.target_competitor_location_mapping where load_d >='2023-09-01'
+
+
+---------
+read from external tableval foundationDF = sparkSession.read.table(foundationTable).where(s"${expr}")
+.select(FINAL_TBL_SELECT_LIST.map(col):_*).drop(DIGITAL_OTHER_ATTRIBUTES,FULL_BOOK_OTHER_ATTRIBUTES) 
+.withColumn(STORE_OTHER_ATTRIBUTES,to_json(col(STORE_OTHER_ATTRIBUTES))).persist(StorageLevel.MEMORY_AND_DISK_2) 
+logInfo(s"Completed fetching data from foundation table ${foundationTable}")
+
+alter table stg_priceent_fnd.omnichannel_price_recommendations drop partition(recommendation_d>='2023-10-03')
+
+INSERT INTO TABLE stg_priceent_fnd.item_price_aggregates PARTITION(retail_day_d) 
+SELECT * FROM prd_priceent_fnd.item_price_aggregates where retail_day_d>'2023-10-01'
+
+INSERT INTO TABLE prd_priceent_fnd.item_location_price_aggregates PARTITION(retail_day_d) 
+SELECT * FROM prd_priceent_tmp.item_location_price_aggregates_bkp_06112023 where retail_day_d>='2023-05-01' and retail_day_d<'2023-06-01'
+
+hdfs dfs -setfacl -R -m user:hive:rwx /user/SVPRIHDP/hive/digital_ci_pricing/
+
+INSERT INTO TABLE prd_priceent_fnd.item_price_aggregates PARTITION(retail_day_d) 
+SELECT * FROM prd_priceent_tmp.item_price_aggregates_bkp_06112023 where retail_day_d >='2023-01-01' and retail_day_d<'2023-05-01'
+
+INSERT INTO TABLE prd_priceent_tmp.item_location_price_aggregates PARTITION(retail_day_d) 
+SELECT * FROM prd_priceent_fnd.item_location_price_aggregates where retail_day_d>'2023-10-30'
+
+
+  CREATE EXTERNAL TABLE prd_priceent_tmp.item_price_aggregates(
+  tcin string  COMMENT 'Automatic number generated and used as the item identifier for each item at Target.',
+  dpci string COMMENT 'Department, class, item identifier (i.e. 37-08-0315)',
+  department_id int COMMENT 'The fourth level in the Merchandise Hierarchy. Department is the primary merchandising classification of Target goods and services. It is used to identify large physical areas in retail stores or buy units by consumer segment. This is the natural/business id for the department.',
+  class_id int COMMENT 'The fifth level in the Merchandise Hierarchy. A class is a grouping of products based on more closely aligned product attributes than Merchandise Department. A class must be qualified by the department number. This is the natural/business id for the class.',
+  effective_d string COMMENT 'the retail price effective from',
+  national_regular_mode_price_a double COMMENT 'The most frequent, lowest price for an item throughout all stores' ,
+  national_current_mode_price_a double COMMENT 'The most frequent, lowest current price for an item throughout all stores' ,
+  national_store_mode_count_q int COMMENT 'The count of stores priced at the national mode',
+  total_store_count_q int COMMENT 'The count of total number of stores priced' ,
+  store_avg_regular_retail_a double COMMENT 'The avg reg price throughout all stores',
+  store_min_regular_retail_a double COMMENT 'The lowest reg price throughout all stores',
+  store_max_regular_retail_a double COMMENT 'The highest reg price throughout all stores',
+  online_regular_retail_a double COMMENT 'This is amount attribute which has online regular price of the item. Sample values 29.22, 22.5, 10, ...',
+  online_current_retail_a double COMMENT 'This is amount attribute which has online current selling price of the item. Sample values 28, 20.6, 9, ...' ,
+  enterprise_avg_regular_retail_a double COMMENT 'Average of all A/D status stores and 3991 location (if 3991 is also in A/D status)',
+  msrp double COMMENT 'Manufacturer Suggested Retail Price.it is the retail price of a good recommended by the manufacturer' ,
+  min_advertised_price_a double COMMENT 'The Minimum Advertised Price (MAP). it is a restriction the manufacturer places on Target, which states that Target may not advertise that they are selling a product for less than the stated amount. The price will only be revealed to guests when they add the product to their cart on Target.com' ,
+  online_only_item_f string  COMMENT 'flag column to identify the store and online only items'  ,
+  change_value_c string COMMENT 'flag column to identify I U D '  ,
+  last_update_utc_ts  string COMMENT 'last updated timestamp in utc ',
+  store_item_group_n               STRING           COMMENT 'This field holds store items group names.Example Oster; Simple Blend; 100 Blender - Black 006706',
+  store_item_members_parity_value  DOUBLE           COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor. This column holds the value.  ( $-20.0 / %  -72.0)',
+  store_item_members_parity_type_n STRING           COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor.This column defines the type of parity i.e PERCENT/DOLLAR ( $-20.0 / %  -72.0)',
+  price_rounding_exclusion_f       BOOLEAN          COMMENT 'This flag indicates if rounding rule exclusions need to be applied or not. Valid values  are true or false. When true, Target company rounding rules are not applicable to the item',
+  store_item_group_id              STRING           COMMENT 'Ivy group identifier for store items.Example 5057e54a2e8f11e7bbe5fa163e28879e'
+  )
+  PARTITIONED BY
+   ( retail_day_d   date      COMMENT 'Daily snapshot partition. The date in Gregorian format (YYYY-MM-DD)')
+  STORED AS ORC
+  LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/item_price_aggregates/'
+  TBLPROPERTIES (
+    'ORC.COMPRESS'='SNAPPY'
+    );
+
+CREATE EXTERNAL TABLE prd_priceent_tmp.item_location_price_aggregates(
+tcin string  COMMENT 'Automatic number generated and used as the item identifier for each item at Target.',
+location_id int COMMENT 'Automatic number generated by LDM for each location (i.e. 1375)',
+dpci string COMMENT 'Department, class, item identifier (i.e. 37-08-0315)',
+department_id int COMMENT 'The fourth level in the Merchandise Hierarchy. Department is the primary merchandising classification of Target goods and services. It is used to identify large physical areas in retail stores or buy units by consumer segment. This is the natural/business id for the department.',
+class_id int COMMENT 'The fifth level in the Merchandise Hierarchy. A class is a grouping of products based on more closely aligned product attributes than Merchandise Department. A class must be qualified by the department number. This is the natural/business id for the class.',
+item_location_status_c string COMMENT 'Describes the status of an item on Target.com. Current values:[A, I, M, D, O]',
+group_n  string  COMMENT 'This is the group name of the group id created for a unique target group used in mapping. It can be a state name/market name based on the group_type attribute.Example values: New Orleans,San Antonio,Minneapolis',
+group_type_n string COMMENT 'This is the type of the particular group. It can be LOCAL,ZONE,MARKET etc',
+state_n string COMMENT 'This is the type of the particular state. It can be OHIO,CALIFORNIA etc',
+effective_d string COMMENT 'the retail price effective from',
+store_regular_retail_a double COMMENT 'This is amount attribute which has regular price of the item. Sample values 29.22, 22.5, 10, ...',
+store_current_retail_a double  COMMENT 'This is amount attribute which has current selling price of the item. Sample values 28, 20.6, 9, ...' ,
+online_regular_retail_a double COMMENT 'This is amount attribute which has online regular price of the item. Sample values 29.22, 22.5, 10, ...',
+online_current_retail_a double COMMENT 'This is amount attribute which has online current selling price of the item. Sample values 28, 20.6, 9, ...' ,
+national_regular_mode_price_a double COMMENT 'The most frequent, lowest price for an item throughout all stores' ,
+national_current_mode_price_a double COMMENT 'The most frequent, lowest current price for an item throughout all stores' ,
+national_store_mode_count_q int COMMENT 'The count of stores priced at the national mode',
+total_store_count_q int COMMENT 'The count of total number of stores priced' ,
+store_avg_regular_retail_a double COMMENT 'The avg reg price throughout all stores',
+store_min_regular_retail_a double COMMENT 'The lowest reg price throughout all stores',
+store_max_regular_retail_a double COMMENT 'The highest reg price throughout all stores',
+enterprise_avg_regular_retail_a double COMMENT 'Average of all A/D status stores and 3991 location (if 3991 is also in A/D status)',
+store_intended_regular_a double COMMENT 'The item intended reg retail price as shown in Ivy',
+intended_national_mode_price_a double COMMENT 'The national mode reg price of the intended retail' ,
+intended_national_mode_store_count_q int COMMENT 'The number of stores at the national mode intended reg retail' ,
+default_intended_regular_a double COMMENT 'The item default intended reg retail price as defined by Ivy' ,
+store_min_intended_regular_a double COMMENT 'The lowest intended price throughout all stores',
+store_max_intended_regular_a double COMMENT 'The highest intended price throughout all stores',
+store_avg_intended_regular_a double COMMENT 'The avg intended price throughout all stores',
+market_intended_mode_regular_a double COMMENT 'The market mode price using the intended retails shown in Ivy Price' ,
+market_intended_mode_store_count_q int COMMENT 'The number of stores in the market at the mode intended reg retail' ,
+market_national_mode_regular_a double COMMENT 'The market mode price using the intended retails shown in Ivy Price',
+market_national_mode_store_count_q int COMMENT 'The number of stores in the market at the mode intended reg retail' ,
+market_min_regular_a double  COMMENT 'The lowest market reg price',
+market_max_regular_a double COMMENT 'The highest market reg price' ,
+market_avg_regular_a double COMMENT 'The average market reg price',
+state_national_mode_regular_a double COMMENT 'The state mode price using the intended retails shown in Ivy Price',
+state_national_mode_store_count_q int COMMENT 'The number of stores in the state participated in mode cal',
+state_min_regular_a double  COMMENT 'The lowest state reg price',
+state_max_regular_a double COMMENT 'The highest state reg price' ,
+state_avg_regular_a double COMMENT 'The average state reg price',
+state_intended_mode_regular_a double COMMENT  'The market mode price using the intended retails shown in Ivy Price' ,
+state_intended_mode_store_count_q int COMMENT  'The number of stores in the state participated in mode cal',
+state_min_intended_regular_a double COMMENT 'The lowest state reg price',
+state_max_intended_regular_a double COMMENT   'The highest state reg price' ,
+state_avg_intended_regular_a double COMMENT  'The average state reg price',
+store_strategy_segment_id int COMMENT 'store segment id',
+store_strategy_segment_desc string COMMENT 'store segment id description',
+store_price_strategy_id int COMMENT 'Store Pricing Strategy ID',
+store_price_strategy_desc string COMMENT 'Store Pricing Strategy ID description',
+online_price_strategy_id int COMMENT 'Online Pricing Strategy id',
+online_price_strategy_desc string COMMENT ' Online Pricing Strategy description' ,
+min_advertised_price_a double COMMENT 'The Minimum Advertised Price (MAP). it is a restriction the manufacturer places on Target, which states that Target may not advertise that they are selling a product for less than the stated amount. The price will only be revealed to guests when they add the product to their cart on Target.com' ,
+msrp double COMMENT 'Manufacturer Suggested Retail Price.it is the retail price of a good recommended by the manufacturer' ,
+initial_regular_retail_a double COMMENT 'The amount entered as the items initial regular retail (Launch Price)' ,
+store_item_group_anchor_id string COMMENT 'Group anchor tcins for store items Example 51912717' ,
+store_line_group_status_c string COMMENT 'Item Line Group Description (Master, Associate, Stand-alone)' ,
+premium_pct string COMMENT 'premium percentage given at item location level ',
+premium_exclusion_f string COMMENT 'Item is listed for an exclusion from premium',
+premium_location_f string COMMENT 'Item location has a premium lift applied',
+store_item_group_n               STRING           COMMENT 'This field holds store items group names.Example Oster; Simple Blend; 100 Blender - Black 006706',
+store_item_members_parity_value  DOUBLE           COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor. This column holds the value.  ( $-20.0 / %  -72.0)',
+store_item_members_parity_type_n STRING           COMMENT 'The price relationship in percentages or dollars of an item wrt its group anchor.This column defines the type of parity i.e PERCENT/DOLLAR ( $-20.0 / %  -72.0)',
+price_rounding_exclusion_f       BOOLEAN          COMMENT 'This flag indicates if rounding rule exclusions need to be applied or not. Valid values  are true or false. When true, Target company rounding rules are not applicable to the item',
+store_item_group_id              STRING           COMMENT 'Ivy group identifier for store items.Example 5057e54a2e8f11e7bbe5fa163e28879e',
+store_cost_a                     DOUBLE           COMMENT ' How much the item costs at the specific store location as sourced from its primary vendor.',
+online_cost_a                    DOUBLE           COMMENT ' How much the item costs at online as sourced from its primary vendor.',
+current_retail_type_c            STRING           COMMENT 'Price type code of an item valid values are  R --> regular price, S -->  sale price and C --> clearance price'
+)
+PARTITIONED BY
+ ( retail_day_d           date      COMMENT 'Daily snapshot partition. The date in Gregorian format (YYYY-MM-DD)')
+STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/item_location_price_aggregates/'
+TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+INSERT INTO TABLE stg_priceent_tmp.tmp_target_price_ext  
+SELECT * FROM stg_priceent_tmp.tmp_target_price 
+
+
+CREATE EXTERNAL TABLE  prd_priceent_tmp.tmp_target_price_ext (  
+      tcin  string,                                     
+      location_id  int,                                 
+      regular_retail_a  double,                         
+      current_retail_a  double,                         
+      current_retail_type_c  string,                    
+      external_system_n  string,                        
+      effective_d  string,                              
+      channel_n  string,                                
+      dpci  string,                                     
+      item_location_status_c  string,                   
+      store_strategy_segment_id  int,                   
+      store_strategy_segment_desc  string,              
+      store_price_strategy_id  int,                     
+      store_price_strategy_desc  string,                
+      online_price_strategy_id  int,                    
+      online_price_strategy_desc  string,               
+      store_item_group_id  string,                      
+      store_item_group_anchor_id  string,               
+      store_item_group_n  string,                       
+      store_item_members_parity_value  double,          
+      store_item_members_parity_type_n  string,         
+      price_rounding_exclusion_f  boolean,              
+      min_advertised_price_a  double,                   
+      msrp  double,                                     
+      initial_regular_retail_a  double,                 
+      store_line_group_status_c  string,                
+      premium_pct  double,                              
+      class_id  int,                                    
+      department_id  int,                               
+      premium_exclusion_f  string,                      
+      default_intended_regular_a  double,               
+      intended_regular_a  double)                       
+   STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/tmp_target_price/'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+
+CREATE EXTERNAL If NOT EXISTS TABLE  stg_priceent_tmp.tmp_target_price_ext (  
+      tcin  string,                                     
+      location_id  int,                                 
+      regular_retail_a  double,                         
+      current_retail_a  double,                         
+      current_retail_type_c  string,                    
+      external_system_n  string,                        
+      effective_d  string,                              
+      channel_n  string,                                
+      dpci  string,                                     
+      item_location_status_c  string,                   
+      store_strategy_segment_id  int,                   
+      store_strategy_segment_desc  string,              
+      store_price_strategy_id  int,                     
+      store_price_strategy_desc  string,                
+      online_price_strategy_id  int,                    
+      online_price_strategy_desc  string,               
+      store_item_group_id  string,                      
+      store_item_group_anchor_id  string,               
+      store_item_group_n  string,                       
+      store_item_members_parity_value  double,          
+      store_item_members_parity_type_n  string,         
+      price_rounding_exclusion_f  boolean,              
+      min_advertised_price_a  double,                   
+      msrp  double,                                     
+      initial_regular_retail_a  double,                 
+      store_line_group_status_c  string,                
+      premium_pct  double,                              
+      class_id  int,                                    
+      department_id  int,                               
+      premium_exclusion_f  string,                      
+      default_intended_regular_a  double,               
+      intended_regular_a  double)                       
+   STORED AS ORC
+LOCATION '/user/SVPRIHDS/hive/external/targetPriceAggregates/tmp_target_price/'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+
+
+DROP table stg_priceent_tmp.tmp_target_price_ext;
+
+insert overwrite table prd_priceent_tmp.tmp_target_price_ext
+select  x.* ,
+  default_intended_regular_a,
+  intended_regular_a
+from
+(
+SELECT
+  rtl.tcin AS tcin,
+  rtl.location_id AS location_id,
+  regular_retail_a,
+  current_retail_a,
+  current_retail_type_c,
+  external_system_n,
+  rtl.effective_d AS effective_d,
+  channel_n,
+  itm.dpci AS dpci,
+  itm.estore_item_status_c AS item_location_status_c,
+  store_strategy_segment_id,
+  store_strategy_segment_desc,
+  store_price_strategy_id,
+  store_price_strategy_desc,
+  online_price_strategy_id,
+  online_price_strategy_desc,
+  store_item_group_id,
+  store_item_group_anchor_id,
+  store_item_group_n,
+  CAST(store_item_members_parity_value AS DOUBLE) AS store_item_members_parity_value,
+  store_item_members_parity_type_n,
+  price_rounding_exclusion_f,
+  min_advertised_price_a,
+  msrp,
+  initial_regular_retail_a,
+  CASE 
+  WHEN ( store_item_group_id IN ('None Yet', NULL, 'NONE') or  store_item_group_id is null ) THEN 'Stand-alone'
+  WHEN (store_item_group_id IS NOT NULL AND ivy.tcin=store_item_group_anchor_id) THEN 'Anchor' ELSE 'Member' END store_line_group_status_c,
+  premium_pct AS premium_pct,
+  itm.class_id AS class_id,
+  itm.department_id AS department_id,
+  excl.premium_exclusion_f as premium_exclusion_f
+FROM
+( select * from  prd_priceent_fnd.omnichannel_target_price
+    where expiry_year_month = '9999-12'
+    AND current_retail_type_c NOT LIKE 'C%'
+    AND regular_retail_a > 0.0
+    AND delete_f = 'N'  ) rtl
+ INNER JOIN ( select location_id from prd_loc_fnd.location where location_sub_type_c NOT IN ('DC', 'FDC', 'FC-RDC', 'FC-STR')
+    AND location_status_n <> 'Closed') loc
+    ON rtl.location_id = loc.location_id
+ INNER JOIN (select tcin, dpci, department_id, class_id, estore_item_status_c from prd_itm_fnd.item WHERE ITEM_STATE_N NOT IN ('DELETED', 'HISTORICAL')) itm
+    ON rtl.tcin = itm.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_fnd.price_item_metadata where expiry_year_month = '9999-12') ivy
+    ON rtl.tcin = ivy.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium where load_d >= date_sub(current_date, 1)) prem
+     ON rtl.location_id = prem.location_id
+    AND ivy.store_strategy_segment_id = prem.segment_id
+    AND ivy.store_price_strategy_id = prem.price_strategy_id
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium_exclusion  WHERE
+       load_d >= date_sub(current_date, 1) and  scope_n = 'DEPARTMENT_CLASS'  ) excl
+      ON itm.department_id = excl.department_id
+      AND itm.class_id = excl.class_id
+ )x
+  LEFT OUTER JOIN (select * from prd_priceent_wrk.intended_regular_price where expiry_year_month = '9999-12' ) intd
+      ON x.tcin = intd.tcin
+      AND x.location_id = intd.location_id; 
+
+
+
+CREATE EXTERNAL TABLE if not exists stg_priceent_tmp.tmp_target_price_ext
+STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/tmp_target_price/'
+ TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY')
+ as 
+select  x.* ,
+  default_intended_regular_a,
+  intended_regular_a
+from
+(
+SELECT
+  rtl.tcin AS tcin,
+  rtl.location_id AS location_id,
+  regular_retail_a,
+  current_retail_a,
+  current_retail_type_c,
+  external_system_n,
+  rtl.effective_d AS effective_d,
+  channel_n,
+  itm.dpci AS dpci,
+  itm.estore_item_status_c AS item_location_status_c,
+  store_strategy_segment_id,
+  store_strategy_segment_desc,
+  store_price_strategy_id,
+  store_price_strategy_desc,
+  online_price_strategy_id,
+  online_price_strategy_desc,
+  store_item_group_id,
+  store_item_group_anchor_id,
+  store_item_group_n,
+  CAST(store_item_members_parity_value AS DOUBLE) AS store_item_members_parity_value,
+  store_item_members_parity_type_n,
+  price_rounding_exclusion_f,
+  min_advertised_price_a,
+  msrp,
+  initial_regular_retail_a,
+  CASE 
+  WHEN ( store_item_group_id IN ('None Yet', NULL, 'NONE') or  store_item_group_id is null ) THEN 'Stand-alone'
+  WHEN (store_item_group_id IS NOT NULL AND ivy.tcin=store_item_group_anchor_id) THEN 'Anchor' ELSE 'Member' END store_line_group_status_c,
+  premium_pct AS premium_pct,
+  itm.class_id AS class_id,
+  itm.department_id AS department_id,
+  excl.premium_exclusion_f as premium_exclusion_f
+FROM
+( select * from  prd_priceent_fnd.omnichannel_target_price
+    where expiry_year_month = '9999-12'
+    AND current_retail_type_c NOT LIKE 'C%'
+    AND regular_retail_a > 0.0
+    AND delete_f = 'N'  ) rtl
+ INNER JOIN ( select location_id from prd_loc_fnd.location where location_sub_type_c NOT IN ('DC', 'FDC', 'FC-RDC', 'FC-STR')
+    AND location_status_n <> 'Closed') loc
+    ON rtl.location_id = loc.location_id
+ INNER JOIN (select tcin, dpci, department_id, class_id, estore_item_status_c from prd_itm_fnd.item WHERE ITEM_STATE_N NOT IN ('DELETED', 'HISTORICAL')) itm
+    ON rtl.tcin = itm.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_fnd.price_item_metadata where expiry_year_month = '9999-12') ivy
+    ON rtl.tcin = ivy.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium where load_d >= date_sub(current_date, 1)) prem
+     ON rtl.location_id = prem.location_id
+    AND ivy.store_strategy_segment_id = prem.segment_id
+    AND ivy.store_price_strategy_id = prem.price_strategy_id
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium_exclusion  WHERE
+       load_d >= date_sub(current_date, 1) and  scope_n = 'DEPARTMENT_CLASS'  ) excl
+      ON itm.department_id = excl.department_id
+      AND itm.class_id = excl.class_id
+ )x
+  LEFT OUTER JOIN (select * from prd_priceent_wrk.intended_regular_price where expiry_year_month = '9999-12' ) intd
+      ON x.tcin = intd.tcin
+      AND x.location_id = intd.location_id  limit 1000 
+
+
+
+  CREATE EXTERNAL TABLE IF NOT EXISTS stg_priceent_tmp.tmp_target_price_ext
+  STORED AS ORC
+  LOCATION '/user/SVPRIHDS/hive/external/targetPriceAggregates/tmp_target_price/'
+  TBLPROPERTIES ('ORC.COMPRESS'='SNAPPY') AS
+  SELECT x.*,
+         default_intended_regular_a,
+         intended_regular_a
+  FROM
+  (
+    SELECT rtl.tcin AS tcin,
+           rtl.location_id AS location_id,
+           regular_retail_a,
+           current_retail_a,
+           current_retail_type_c,
+           external_system_n,
+           rtl.effective_d AS effective_d,
+           channel_n,
+           itm.dpci AS dpci,
+           itm.estore_item_status_c AS item_location_status_c,
+           store_strategy_segment_id,
+           store_strategy_segment_desc,
+           store_price_strategy_id,
+           store_price_strategy_desc,
+           online_price_strategy_id,
+           online_price_strategy_desc,
+           store_item_group_id,
+           store_item_group_anchor_id,
+           store_item_group_n,
+           CAST(store_item_members_parity_value AS DOUBLE) AS store_item_members_parity_value,
+           store_item_members_parity_type_n,
+           price_rounding_exclusion_f,
+           min_advertised_price_a,
+           msrp,
+           initial_regular_retail_a,
+           CASE
+             WHEN (store_item_group_id IN ('None Yet', NULL, 'NONE') OR store_item_group_id IS NULL) THEN 'Stand-alone'
+             WHEN (store_item_group_id IS NOT NULL AND ivy.tcin = store_item_group_anchor_id) THEN 'Anchor'
+             ELSE 'Member'
+           END store_line_group_status_c,
+           premium_pct AS premium_pct,
+           itm.class_id AS class_id,
+           itm.department_id AS department_id,
+           excl.premium_exclusion_f AS premium_exclusion_f
+    FROM
+    (SELECT * FROM prd_priceent_fnd.omnichannel_target_price
+      WHERE expiry_year_month = '9999-12'
+        AND current_retail_type_c NOT LIKE 'C%'
+        AND regular_retail_a > 0.0
+        AND delete_f = 'N') rtl
+    INNER JOIN
+    (SELECT location_id FROM prd_loc_fnd.location
+      WHERE location_sub_type_c NOT IN ('DC', 'FDC', 'FC-RDC', 'FC-STR') AND location_status_n <> 'Closed') loc
+    ON rtl.location_id = loc.location_id
+    INNER JOIN
+    (SELECT tcin, dpci, department_id, class_id, estore_item_status_c FROM prd_itm_fnd.item
+      WHERE ITEM_STATE_N NOT IN ('DELETED', 'HISTORICAL')) itm
+    ON rtl.tcin = itm.tcin
+    LEFT OUTER JOIN
+    (SELECT * FROM prd_priceent_fnd.price_item_metadata WHERE expiry_year_month = '9999-12') ivy
+    ON rtl.tcin = ivy.tcin
+    LEFT OUTER JOIN
+    (SELECT * FROM prd_priceent_wrk.store_price_premium WHERE load_d >= date_sub(current_date, 1)) prem
+    ON rtl.location_id = prem.location_id
+      AND ivy.store_strategy_segment_id = prem.segment_id
+      AND ivy.store_price_strategy_id = prem.price_strategy_id
+    LEFT OUTER JOIN
+    (SELECT * FROM prd_priceent_wrk.store_price_premium_exclusion
+      WHERE load_d >= date_sub(current_date, 1) AND scope_n = 'DEPARTMENT_CLASS') excl
+    ON itm.department_id = excl.department_id AND itm.class_id = excl.class_id
+  ) x
+  LEFT OUTER JOIN
+  (SELECT * FROM prd_priceent_wrk.intended_regular_price WHERE expiry_year_month = '9999-12') intd
+  ON x.tcin = intd.tcin AND x.location_id = intd.location_id
+  LIMIT 1000
+
+
+  set tez.queue.name=SVPRIHDS;
+CREATE EXTERNAL TABLE If NOT EXISTS  stg_priceent_tmp.tmp_target_price_ext (  
+      tcin  string,                                     
+      location_id  int,                                 
+      regular_retail_a  double,                         
+      current_retail_a  double,                         
+      current_retail_type_c  string,                    
+      external_system_n  string,                        
+      effective_d  string,                              
+      channel_n  string,                                
+      dpci  string,                                     
+      item_location_status_c  string,                   
+      store_strategy_segment_id  int,                   
+      store_strategy_segment_desc  string,              
+      store_price_strategy_id  int,                     
+      store_price_strategy_desc  string,                
+      online_price_strategy_id  int,                    
+      online_price_strategy_desc  string,               
+      store_item_group_id  string,                      
+      store_item_group_anchor_id  string,               
+      store_item_group_n  string,                       
+      store_item_members_parity_value  double,          
+      store_item_members_parity_type_n  string,         
+      price_rounding_exclusion_f  boolean,              
+      min_advertised_price_a  double,                   
+      msrp  double,                                     
+      initial_regular_retail_a  double,                 
+      store_line_group_status_c  string,                
+      premium_pct  double,                              
+      class_id  int,                                    
+      department_id  int,                               
+      premium_exclusion_f  string,                      
+      default_intended_regular_a  double,               
+      intended_regular_a  double)                       
+   STORED AS ORC
+LOCATION '/user/SVPRIHDS/hive/external/targetPriceAggregates/tmp_target_price/'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+set tez.queue.name=SVPRIHDP;
+CREATE EXTERNAL TABLE If NOT EXISTS  prd_priceent_tmp.tmp_target_price (  
+      tcin  string,                                     
+      location_id  int,                                 
+      regular_retail_a  double,                         
+      current_retail_a  double,                         
+      current_retail_type_c  string,                    
+      external_system_n  string,                        
+      effective_d  string,                              
+      channel_n  string,                                
+      dpci  string,                                     
+      item_location_status_c  string,                   
+      store_strategy_segment_id  int,                   
+      store_strategy_segment_desc  string,              
+      store_price_strategy_id  int,                     
+      store_price_strategy_desc  string,                
+      online_price_strategy_id  int,                    
+      online_price_strategy_desc  string,               
+      store_item_group_id  string,                      
+      store_item_group_anchor_id  string,               
+      store_item_group_n  string,                       
+      store_item_members_parity_value  double,          
+      store_item_members_parity_type_n  string,         
+      price_rounding_exclusion_f  boolean,              
+      min_advertised_price_a  double,                   
+      msrp  double,                                     
+      initial_regular_retail_a  double,                 
+      store_line_group_status_c  string,                
+      premium_pct  double,                              
+      class_id  int,                                    
+      department_id  int,                               
+      premium_exclusion_f  string,                      
+      default_intended_regular_a  double,               
+      intended_regular_a  double)                       
+   STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/tmp_target_price/'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+INSERT OVERWRITE table prd_priceent_tmp.tmp_target_price
+SELECT  x.* ,
+  default_intended_regular_a,
+  intended_regular_a
+FROM
+(
+SELECT
+  rtl.tcin AS tcin,
+  rtl.location_id AS location_id,
+  regular_retail_a,
+  current_retail_a,
+  current_retail_type_c,
+  external_system_n,
+  rtl.effective_d AS effective_d,
+  channel_n,
+  itm.dpci AS dpci,
+  itm.estore_item_status_c AS item_location_status_c,
+  store_strategy_segment_id,
+  store_strategy_segment_desc,
+  store_price_strategy_id,
+  store_price_strategy_desc,
+  online_price_strategy_id,
+  online_price_strategy_desc,
+  store_item_group_id,
+  store_item_group_anchor_id,
+  store_item_group_n,
+  CAST(store_item_members_parity_value AS DOUBLE) AS store_item_members_parity_value,
+  store_item_members_parity_type_n,
+  price_rounding_exclusion_f,
+  min_advertised_price_a,
+  msrp,
+  initial_regular_retail_a,
+  CASE 
+  WHEN ( store_item_group_id IN ('None Yet', NULL, 'NONE') or  store_item_group_id is null ) THEN 'Stand-alone'
+  WHEN (store_item_group_id IS NOT NULL AND ivy.tcin=store_item_group_anchor_id) THEN 'Anchor' ELSE 'Member' END store_line_group_status_c,
+  premium_pct AS premium_pct,
+  itm.class_id AS class_id,
+  itm.department_id AS department_id,
+  excl.premium_exclusion_f as premium_exclusion_f
+FROM
+( select * from  prd_priceent_fnd.omnichannel_target_price
+    where expiry_year_month = '9999-12'
+    AND current_retail_type_c NOT LIKE 'C%'
+    AND regular_retail_a > 0.0
+    AND delete_f = 'N'  ) rtl
+ INNER JOIN ( select location_id from prd_loc_fnd.location where location_sub_type_c NOT IN ('DC', 'FDC', 'FC-RDC', 'FC-STR')
+    AND location_status_n <> 'Closed') loc
+    ON rtl.location_id = loc.location_id
+ INNER JOIN (select tcin, dpci, department_id, class_id, estore_item_status_c from prd_itm_fnd.item WHERE ITEM_STATE_N NOT IN ('DELETED', 'HISTORICAL')) itm
+    ON rtl.tcin = itm.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_fnd.price_item_metadata where expiry_year_month = '9999-12') ivy
+    ON rtl.tcin = ivy.tcin
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium where load_d >= date_sub(current_date, 1)) prem
+     ON rtl.location_id = prem.location_id
+    AND ivy.store_strategy_segment_id = prem.segment_id
+    AND ivy.store_price_strategy_id = prem.price_strategy_id
+ LEFT OUTER JOIN (select * from prd_priceent_wrk.store_price_premium_exclusion  WHERE
+       load_d >= date_sub(current_date, 1) and  scope_n = 'DEPARTMENT_CLASS'  ) excl
+      ON itm.department_id = excl.department_id
+      AND itm.class_id = excl.class_id
+ )x
+  LEFT OUTER JOIN (select * from prd_priceent_wrk.intended_regular_price where expiry_year_month = '9999-12' ) intd
+      ON x.tcin = intd.tcin
+      AND x.location_id = intd.location_id; 
+
+
+item
+      tcin, dpci, department_id, class_id, estore_item_status_c
+
+
+item location 
+
+ $TCIN,$LOCATION_ID,$COST_A
+
+
+  tempItemLocation ="/user/SVPRIHDS/hive/external/targetPriceAggregates/tmp_item"
+  tempItem ="/user/SVPRIHDS/hive/external/targetPriceAggregates/tmp_item_location"
+  tempItemTable ="stg_priceent_tmp.tmp_item_table"
+  tempItemLocationTable ="stg_priceent_tmp.tmp_item_location_table"
+
+
+  create external table prd_priceent_tmp.tmp_item_table
+  (tcin string, 
+  dpci string, 
+  department_id int, 
+  class_id int, 
+  estore_item_status_c string)
+     STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/tmp_item'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+
+  create external table prd_priceent_tmp.tmp_item_location_table
+  (tcin string, 
+ location_id int,
+ cost_a double)
+     STORED AS ORC
+LOCATION '/user/SVPRIHDP/hive/external/targetPriceAggregates/tmp_item_location'
+ TBLPROPERTIES (
+  'ORC.COMPRESS'='SNAPPY'
+  );
+
+
+INSERT OVERWRITE TABLE stg_priceent_tmp.tmp_item_location_table select tcin,location_id,cost_a from prd_itm_loc_fnd.item_location where item_location_status_c in ('A', 'D')
+
+
+ val marketDF = spark.read.table("prd_priceent_fnd.target_competitor_location_mapping").select("LOCATION_ID",  "GROUP_ID",  "group_n",  "group_type_n", "CLUSTER_PROFILE_ID").filter(col("LOAD_D") === s"'2023-11-05'")
+
+  val tempDF =   spark.read.table("prd_priceent_tmp.tmp_target_price")
+
+  val itemLocDF=spark.read.table("prd_priceent_wrk.item_location").select("TCIN","LOCATION_ID","COST_A").filter(col("ITEM_LOCATION_STATUS").isin("A", "D"))
+
+
+SELECT  alternate_images_arr  ,    
+      average_timeframe_to_sell_q  ,    
+      back_order_type  ,    
+      barcode ,    
+      barcode_type ,    
+      brand_arr ,    
+      brand_id  ,    
+      brand_n  ,    
+      brand_royalty_f  ,    
+      brand_type_n  ,    
+      buy_uom  ,    
+      child_dpci_arr  ,    
+      child_tcin_arr  ,    
+      class_c   ,    
+      class_id ,    
+      class_n  ,    
+      color_family_name_arr  ,    
+      color_name_arr  ,    
+      component_dpci_arr  ,    
+      component_tcin_arr  ,    
+      department_id  ,    
+      department_n  ,    
+      distribution_center_service_strategy_id  ,    
+      division_id  ,    
+      division_n  ,    
+      downstream_desc  ,    
+      dpci  ,    
+      estore_item_status_c  ,    
+      estore_item_status_n  ,    
+      giftcard_delivery_channel_n  ,    
+      giftcard_event_id ,    
+      group_id  ,    
+      group_n  ,    
+      guest_return_permanent_policy_id  ,    
+      guest_return_policy_day_count  ,    
+      guest_return_policy_end_date_ct_ts  ,    
+      guest_return_policy_id ,    
+      guest_return_policy_start_date_ct_ts  ,    
+      guest_return_policy_type  ,    
+      guest_return_policy_user_type ,    
+      guest_return_special_policy_id  ,    
+      has_bottle_deposit_f  ,    
+      has_lead_disclosure_f  ,    
+      hazardous_class_type_c  ,    
+      hazmat_c ,    
+      hazmat_n  ,    
+      image_base_url  ,    
+      import_designation_desc  ,    
+      intended_launch_utc_ts  ,    
+      intended_selling_channels_arr  ,    
+      is_auto_defective_f  ,    
+      is_back_order_eligible_f  ,    
+      is_charge_back_f  ,    
+      is_child_primary_f  ,    
+      is_child_sold_separately_f  ,    
+      is_compliance_ready_f   ,    
+      is_environmentally_sensitive_f  ,    
+      is_expiring_item_f ,    
+      is_flammable_f ,    
+      is_gift_wrap_eligible_f ,    
+      is_guest_facing_brand_f ,    
+      is_hazmat_f  ,    
+      is_hazmat_publishable_f ,    
+      is_infinite_inventory_f  ,    
+      is_ingestible_f  ,    
+      is_market_place_f  ,    
+      is_master_f  ,    
+      is_merchant_approved_for_publishing_f  ,    
+      is_orderable_f  ,    
+      is_parent_f  ,    
+      is_post_office_box_prohibited_f ,    
+      is_primary_licensed_personality_f  ,    
+      is_primary_licensed_property_f  ,    
+      is_product_recalled_f  ,    
+      is_retail_ticketed_f  ,    
+      is_rfid_enabled_f  ,    
+      is_sellable_f  ,    
+      is_shipped_in_original_container_f  ,    
+      is_shipped_in_own_container_f ,    
+      is_snap_eligible_f  ,    
+      is_target_owned_brand_f  ,    
+      is_weight_required_f  ,    
+      item_create_type  ,    
+      item_first_received_d  ,    
+      item_highlights_bullets  ,    
+      item_specifications_bullets_arr  ,    
+      item_state_n  ,    
+      item_title  ,    
+      item_type_category_type ,    
+      item_type_id  ,    
+      item_type_n  ,    
+      item_url ,    
+      item_video_count  ,    
+      kafka_ct_ts  ,    
+      kafka_offset ,    
+      kit_type  ,    
+      launch_utc_ts ,    
+      license_personality_id  ,    
+      license_personality_n  ,    
+      license_property_id  ,    
+      license_property_n   ,    
+      lifecycle_item_complete_utc_ts  ,    
+      lifecycle_status_c  ,    
+      lifecycle_status_n  ,    
+      mandatory_mta_completion_ct_ts  ,    
+      manufacturer_style_id  ,    
+      master_dpci_arr  ,    
+      master_tcin_arr ,    
+      maximum_back_order_q  ,    
+      maximum_preorder_q  ,    
+      media_format  ,    
+      merchandise_presentation_hanger_code_arr  ,    
+      merchandise_presentation_type_code_arr  ,    
+      merchandise_presentation_type_name_arr   ,    
+      merchandise_type_id  ,    
+      merchandise_type_n  ,    
+      minimum_age  ,  
+      minimum_store_shelf_life_number   ,    
+      minimum_timeframe_to_sell_number  ,    
+      net_content_quantity_a ,    
+      net_content_quantity_c  ,    
+      node_ids_arr  ,    
+      number_of_boxes_per_shipment_q  ,    
+      organic_c  ,    
+      organic_n  ,    
+      package_depth_number  ,    
+      package_dimension_uom  ,    
+      package_dimensions_source_n  ,    
+      package_height_number  ,    
+      package_weight_a ,    
+      package_weight_c  ,    
+      package_width_number ,    
+      parcel_shipping_options_arr  ,    
+      parent_dpci_arr  ,    
+      parent_tcin_arr  ,    
+      pattern_id_arr  ,    
+      pattern_name_arr  ,    
+      prepaid_segment_denomination_a  ,    
+      prep_code_ship_from_store  ,    
+      primary_distribution_mode_n  ,    
+      primary_fulfillment_location_c  ,    
+      primary_image  ,    
+      primary_vendor_id ,    
+      processed_ct_ts  ,    
+      product_id_arr   ,    
+      product_relationship_type_c  ,    
+      product_relationship_type_n  ,    
+      product_sub_type_id  ,    
+      product_sub_type_n  ,    
+      product_type_id  ,    
+      product_type_n  ,    
+      purchase_limit_number  ,    
+      reasons_not_ready_for_launch_arr  ,    
+      reasons_not_site_published_arr  ,    
+      receiving_facility_type_n  ,    
+      relationship_type_c  ,    
+      relationship_type_n   ,    
+      release_d   ,    
+      return_method_c  ,    
+      return_method_n ,    
+      shelf_label_desc  ,    
+      shipping_carrier_type  ,    
+      shipping_exclusions_arr  ,    
+      shipping_methods_arr,    
+      short_desc ,    
+      size_chart_url  ,    
+      size_group_name_arr  ,    
+      size_id_arr  ,    
+      storage_temperature_zone  ,    
+      street_ct_ts  ,    
+      street_d  ,    
+      style_c  ,    
+      style_id  ,    
+      style_n  ,    
+      sub_class_c  ,    
+      sub_class_id ,    
+      sub_class_n  ,    
+      sub_group_id  ,    
+      sub_group_n ,    
+      tax_c ,    
+      tcin  ,    
+      threshold_quantity_arr   ,    
+      total_product_shelf_life_q ,    
+      total_threshold_q  ,    
+      to_sell_timeframe_uom  ,    
+      units_per_package_q ,    
+      unpublish_reason_c  ,    
+      unpublish_reason_n ,    
+      variation_theme_arr  ,    
+      vendor_description_n ,    
+      vendor_n ,    
+      vendor_seller_id  ,    
+      waste_type_c  ,    
+      waste_type_n 
+      from prd_itm_fnd.item;
+
+      insert into table  stg_priceent_fnd.target_competitor_location_mapping partition(load_d)
+      select * from prd_priceent_fnd.target_competitor_location_mapping where load_d="2023-11-14"
+
+val minPublishDate = "2023-11-14"
+val LOAD_D ="load_d"
+val expr = s"$LOAD_D >= '$minPublishDate'"
+
+        val competitorLocationDF = spark.read.table("prd_priceent_fnd.target_competitor_location_mapping").where(expr).select("ADDRESS_T", "STORE_NUMBER", "COMPETITOR_LOCATION_ID","LOAD_D")
